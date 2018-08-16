@@ -22,7 +22,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class PalyGameActivity extends AppCompatActivity {
+public class PalyGameActivity extends MenuActivity {
+    static int NO_OF_QUESTIONS = 5;
+
     String currentUser = "";
 
     private ViewPager mSlideViewPage;
@@ -43,25 +45,26 @@ public class PalyGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paly_game);
         // custom dialog
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_enter_email);
-        dialog.setTitle("Enter Email");
-
-        // set the custom dialog components - text, button
-        Button dialogButton = (Button)dialog.findViewById(R.id.btnStart);
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText etEmail = dialog.findViewById(R.id.etEmail);
-                currentUser = etEmail.getText().toString();
-
-                getQuestions();
-
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
+//        final Dialog dialog = new Dialog(this);
+//        dialog.setContentView(R.layout.dialog_enter_email);
+//        dialog.setTitle("Enter Email");
+//
+//        // set the custom dialog components - text, button
+//        Button dialogButton = (Button)dialog.findViewById(R.id.btnStart);
+//        dialogButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                EditText etEmail = dialog.findViewById(R.id.etEmail);
+//                currentUser = etEmail.getText().toString();
+//
+//                getQuestions();
+//
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+        getQuestions();
     }
 
     // make query to get questions using api from trivia

@@ -4,20 +4,49 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.facebook.stetho.Stetho;
+import java.util.Random;
 
-public class MainActivity extends MenuActivity {
+public class MenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Stetho.initializeWithDefaults(this);
+        setContentView(R.layout.activity_menu);
+    }
 
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int selectedItemId = item.getItemId();
+
+        if(selectedItemId == R.id.miPlayGame) {
+            ShowEmailEnteringDialog();
+
+        }else if(selectedItemId == R.id.miShowHistory){
+            Intent intentHistory = new Intent(this, HistoryActivity.class);
+            startActivity(intentHistory);
+
+        }
+
+
+        return true;
+    }
+
+    public void ShowEmailEnteringDialog(){
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_enter_email);
         dialog.setTitle("Enter Email");
@@ -31,7 +60,7 @@ public class MainActivity extends MenuActivity {
                 //currentUser = etEmail.getText().toString();
 
                 //getQuestions();
-                Intent intentPlayGame = new Intent(MainActivity.this, PalyGameActivity.class);
+                Intent intentPlayGame = new Intent(MenuActivity.this, PalyGameActivity.class);
                 intentPlayGame.putExtra(Intent.EXTRA_TEXT, etEmail.getText().toString());
 //        intentPlayGame.putExtra(Intent.EXTRA_SUBJECT, "Comp science");
                 startActivity(intentPlayGame);
@@ -40,21 +69,5 @@ public class MainActivity extends MenuActivity {
         });
 
         dialog.show();
-
-    }
-
-    public void clickBtnPlayGame(View view){
-        Intent intentPlayGame = new Intent(MainActivity.this, PalyGameActivity.class);
-//        intentToStartActivity.putExtra(Intent.EXTRA_TEXT, "Sent from Main Activity");
-//        intentToStartActivity.putExtra(Intent.EXTRA_SUBJECT, "Comp science");
-        startActivity(intentPlayGame);
-    }
-
-    public void clickBtnShowHistory(View view){
-        Intent intentHistory = new Intent(MainActivity.this, HistoryActivity.class);
-//        intentToStartActivity.putExtra(Intent.EXTRA_TEXT, "Sent from Main Activity");
-//        intentToStartActivity.putExtra(Intent.EXTRA_SUBJECT, "Comp science");
-        startActivity(intentHistory);
-
     }
 }

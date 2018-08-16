@@ -29,6 +29,14 @@ public class SliderAdapter extends PagerAdapter {
             userAnswer[i] = -1;
     }
 
+    public void submitUserAnswers(View view){
+        // make score usin user's answers
+        int score = 0;
+
+        for(int i=0; i < answers.length; i++){
+            if(isCorrectAnswer(answers[i])) score++;
+        }
+    }
 
     @Override
     public int getCount() {
@@ -51,7 +59,12 @@ public class SliderAdapter extends PagerAdapter {
         RadioButton rbChoice2 = view.findViewById(R.id.rbChoice2);
         RadioButton rbChoice3 = view.findViewById(R.id.rbChoice3);
         RadioButton rbChoice4 = view.findViewById(R.id.rbChoice4);
-        //Button btnNext = view.findViewById(R.id.btnNext);
+        Button btnSubmit = view.findViewById(R.id.btnBubmit);
+
+        if(position == 4)
+            btnSubmit.setVisibility(View.VISIBLE);
+        else
+            btnSubmit.setVisibility(View.INVISIBLE);
 
         Question q = slide_data.get(position);
 
@@ -93,4 +106,5 @@ public class SliderAdapter extends PagerAdapter {
             else if (id == R.id.rbChoice4) userAnswer[position] = 3;
         }
     }
+
 }
