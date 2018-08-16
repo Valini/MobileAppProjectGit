@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">PlayWithQuiz</string>
+    <string name="app_name">Quiz Whiz</string>
+    <string name="welcome">Welcome to Quiz Whiz</string>
 </resources>

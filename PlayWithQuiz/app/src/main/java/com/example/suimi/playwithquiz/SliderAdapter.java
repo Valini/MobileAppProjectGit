@@ -30,12 +30,12 @@ public class SliderAdapter extends PagerAdapter {
     }
 
     public void submitUserAnswers(View view){
-        // make score usin user's answers
+      /*  // make score usin user's answers
         int score = 0;
 
         for(int i=0; i < answers.length; i++){
             if(isCorrectAnswer(answers[i])) score++;
-        }
+        }*/
     }
 
     @Override
