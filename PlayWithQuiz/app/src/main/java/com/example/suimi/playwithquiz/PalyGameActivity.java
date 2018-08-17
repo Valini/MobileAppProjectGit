@@ -26,6 +26,8 @@ public class PalyGameActivity extends MenuActivity {
     static int NO_OF_QUESTIONS = 5;
 
     String currentUser = "";
+    String jsonString;
+    boolean isInstanceStateSaved = false;
 
     private ViewPager mSlideViewPage;
     private LinearLayout mDotLayout;
@@ -39,7 +41,6 @@ public class PalyGameActivity extends MenuActivity {
     public int score;
     public int[] userAnswer;
 
-
     public ArrayList<Question> getQuestionList(){
         return questionList;
     }
@@ -48,6 +49,10 @@ public class PalyGameActivity extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paly_game);
+
+        if(savedInstanceState != null)
+            isInstanceStateSaved = true;
+
         btnSubmit = findViewById(R.id.btnSubmit);
 
         // fetch email address passed by dialog(MainActivity)
@@ -60,8 +65,47 @@ public class PalyGameActivity extends MenuActivity {
         for(int i=0; i < userAnswer.length; i++)
             userAnswer[i] = -1;
 
-        getQuestions();
+        Log.i("Suim", "On Create");
+
     }
+
+    @Override
+    protected  void onResume(){
+        super.onResume();
+
+        if(!isInstanceStateSaved)
+            getQuestions();
+        else {
+            parseJSONString();
+
+            //sliderAdapter.pa
+        }
+        Log.i("Suim", "On Resume");
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getUserAnswer();
+
+        outState.putString("JSON_QUIZ", jsonString);
+        outState.putIntArray("USER_ANSWERS", userAnswer);
+
+        Log.i("Suim",  "In onSaveInstanceState");
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        jsonString = savedInstanceState.getString("JSON_QUIZ");
+        userAnswer = savedInstanceState.getIntArray("USER_ANSWERS");
+
+        Log.i("Suim",  "In onRestoreInstanceState");
+    }
+
+
 
     public void ShowAskSaveDialog(){
         boolean isAnsweredAll = true;
@@ -263,45 +307,51 @@ public class PalyGameActivity extends MenuActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            questionList = new ArrayList<>();
+            jsonString = s;
 
-            try {
-                s = replaceSpecialCharater(s);
-                // Convert string to JSONObject
-                JSONObject jsonObject = new JSONObject(s);
-                // Get only results part as a string
-                String results = jsonObject.getString("results");
-                // Make array with results string
-                JSONArray jsonArray = new JSONArray(results);
-
-                for(int i=0; i<jsonArray.length();i++){
-                    JSONObject item = jsonArray.getJSONObject(i);
-                    // Fetch from json string
-                    String q = item.getString("question");
-                    String a = item.getString("correct_answer");
-
-                    // Create question object with q and a
-                    Question question = new Question(q, a);
-
-                    // set the choices object
-                    question.addChoice(a);
-                    String incorrectAnswer = item.getString("incorrect_answers");
-                    JSONArray otherChoices = new JSONArray(incorrectAnswer);
-                    for(int j=0; j<Question.NO_OF_CHOICES-1; j++){
-                        question.addChoice(otherChoices.get(j).toString());
-                    }
-
-                    // add question to the list
-                    questionList.add(question);
-                }
-
-                createSlides();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            parseJSONString();
         }
 
     }
 
+    public void parseJSONString(){
+        questionList = new ArrayList<>();
+
+        try {
+            jsonString = replaceSpecialCharater(jsonString);
+            // Convert string to JSONObject
+            JSONObject jsonObject = new JSONObject(jsonString);
+            // Get only results part as a string
+            String results = jsonObject.getString("results");
+            // Make array with results string
+            JSONArray jsonArray = new JSONArray(results);
+
+            for(int i=0; i<jsonArray.length();i++){
+                JSONObject item = jsonArray.getJSONObject(i);
+                // Fetch from json string
+                String q = item.getString("question");
+                String a = item.getString("correct_answer");
+
+                // Create question object with q and a
+                Question question = new Question(q, a);
+
+                // set the choices object
+                question.addChoice(a);
+                String incorrectAnswer = item.getString("incorrect_answers");
+                JSONArray otherChoices = new JSONArray(incorrectAnswer);
+                for(int j=0; j<Question.NO_OF_CHOICES-1; j++){
+                    question.addChoice(otherChoices.get(j).toString());
+                }
+
+                // add question to the list
+                questionList.add(question);
+            }
+
+            createSlides();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
 

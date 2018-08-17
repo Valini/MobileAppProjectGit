@@ -20,11 +20,13 @@ public class SliderAdapter extends PagerAdapter {
     LayoutInflater layoutInflater;
     public ArrayList<Question> slide_data;
     public View[] pageViews;
+    public int[] userAnswer;
 
-    public SliderAdapter(Context context, ArrayList<Question> data){
+    public SliderAdapter(Context context, ArrayList<Question> data, int[] answers){
         this.context = context;
         slide_data = data;
         pageViews = new View[PalyGameActivity.NO_OF_QUESTIONS];
+        userAnswer = answers;
     }
 
 
