@@ -3,6 +3,7 @@ package com.example.suimi.playwithquiz;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,23 +11,40 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class HistoryActivity extends MenuActivity {
+    HistoryDbHelper dbHelper;
+    SQLiteDatabase db;
+    List<History> scoreList = new ArrayList();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-
+        dbHelper = new HistoryDbHelper(this);
+         db =dbHelper.getReadableDatabase();
 
         //save data sample to test
-        saveValuesToDB();
+        //saveValuesToDB();
 
         //fetch the score data from the database
-       fetchDataFromDB();
+       //fetchDataFromDB();
+
+        //fetch Data Async
+        new FetchScoreData().execute();
 
     }
 
@@ -50,10 +68,13 @@ public class HistoryActivity extends MenuActivity {
         // Gets the data repository in write mode
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         // Create a new map of values, where column names are the keys
+        Date now = new Date();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a zzz", Locale.CANADA);
+        System.out.println("Format 2:   " + dateFormatter.format(now));
         ContentValues values = new ContentValues();
         values.put(QuizContract.QuizTable.COLUMN_EMAIL, "newEmail@mac.com");
         values.put(QuizContract.QuizTable.COLUMN_SCORE, 2);
-        values.put(QuizContract.QuizTable.COLUMN_DATE, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        values.put(QuizContract.QuizTable.COLUMN_DATE, dateFormatter.format(now));
         values.put(QuizContract.QuizTable.COLUMN_DIFFICULTY, 2);
         //Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(QuizContract.QuizTable.TABLE_NAME, null, values);
@@ -129,9 +150,83 @@ public class HistoryActivity extends MenuActivity {
             Integer difficulty=cursor.getInt(4);
 
 
-            //tvResults.append(cursor.getString(0) + "||" +cursor.getString(1) + "||" + cursor.getString(2) + cursor.getString(3)+ "\n");
+
             tvResults.append(email + "||" +score + "||" + date + "||" +difficulty+ "\n");
         }
 
+    }
+
+    public class FetchScoreData extends AsyncTask<String, Void, List<History>> {
+
+        @Override
+        protected void onPreExecute() {
+            TextView tvResults = findViewById(R.id.tv_results);
+            tvResults.setText("Data Starting to Load...");;
+
+
+        }
+
+
+        @Override
+        protected List<History> doInBackground(String... values) {
+
+
+            String[] projection = {
+                    BaseColumns._ID,
+                    QuizContract.QuizTable.COLUMN_EMAIL,
+                    QuizContract.QuizTable.COLUMN_SCORE,
+                    QuizContract.QuizTable.COLUMN_DATE,
+                    QuizContract.QuizTable.COLUMN_DIFFICULTY
+            };
+            Cursor cursor = db.query(
+                    QuizContract.QuizTable.TABLE_NAME,   // The table to query
+                    projection,                 // The array of columns to return (pass null to get all)
+                    null,               // The columns for the WHERE clause
+                    null,           // The values for the WHERE clause
+                    null,              // don't group the rows
+                    null,              // don't filter by row groups
+                    null             // The sort order
+            );
+            cursor.moveToFirst();
+            Log.i("ValueFromDB", cursor.getString(0));
+
+            TextView tvResults = findViewById(R.id.tv_results);
+            tvResults.setText("Score:" + "\n");
+
+            while (cursor.moveToNext()) {
+                Integer id = cursor.getInt(0);
+                String email = cursor.getString(1);
+                Integer score = cursor.getInt(2);
+                String date = cursor.getString(3);
+                Integer difficulty = cursor.getInt(4);
+                History scoreHistory = new History();
+                scoreHistory.setId(id);
+                scoreHistory.setEmail(email);
+                scoreHistory.setScore(score);
+                scoreHistory.setDate(date);
+                scoreHistory.setDifficulty(difficulty);
+                scoreList.add(scoreHistory);
+
+
+            }
+
+            return scoreList;
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(List<History> scoreList) {
+            TextView tvResults = findViewById(R.id.tv_results);
+            for (int i = 0; i < scoreList.size(); i++) {
+                History scores = (History) scoreList.get(i);
+                tvResults.append(scores.getId()+ "||" + scores.getEmail() + "||" + scores.getDate() + "||" + scores.getDifficulty() + "\n");
+            }
+
+        }
     }
 }

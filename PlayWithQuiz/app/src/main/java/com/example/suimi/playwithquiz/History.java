@@ -1,6 +1,7 @@
 package com.example.suimi.playwithquiz;
 
 public class History {
+    private int id;
     private String email;
     private int score;
     private String date;
@@ -8,7 +9,16 @@ public class History {
 
     History(){}
 
+    History(Integer id, String email, int score, String date, int difficulty){
+        this.id =id;
+        this.email=email;
+        this.score=score;
+        this.date = date;
+        this.difficulty = difficulty;
+    }
+
     History(String email, int score){
+
         this.email = email;
         this.score = score;
     }
@@ -17,6 +27,13 @@ public class History {
         this(email, score);
         this.date = date;
         this.difficulty = difficulty;
+    }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEmail(){
