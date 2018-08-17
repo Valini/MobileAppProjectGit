@@ -19,16 +19,12 @@ public class SliderAdapter extends PagerAdapter {
     Context context;
     LayoutInflater layoutInflater;
     public ArrayList<Question> slide_data;
-    public int[] userAnswer;
     public View[] pageViews;
 
     public SliderAdapter(Context context, ArrayList<Question> data){
         this.context = context;
         slide_data = data;
         pageViews = new View[PalyGameActivity.NO_OF_QUESTIONS];
-        userAnswer = new int[PalyGameActivity.NO_OF_QUESTIONS];
-        for(int i=0; i < userAnswer.length; i++)
-            userAnswer[i] = -1;
     }
 
 
@@ -61,10 +57,10 @@ public class SliderAdapter extends PagerAdapter {
         Question q = slide_data.get(position);
 
         tvQuestion.setText(q.getQuestion());
-        rbChoice1.setText(q.getNthChoiceStr(0));
-        rbChoice2.setText(q.getNthChoiceStr(1));
-        rbChoice3.setText(q.getNthChoiceStr(2));
-        rbChoice4.setText(q.getNthChoiceStr(3));
+        rbChoice1.setText(q.getNthChoice(0));
+        rbChoice2.setText(q.getNthChoice(1));
+        rbChoice3.setText(q.getNthChoice(2));
+        rbChoice4.setText(q.getNthChoice(3));
 
         container.addView(view);
 

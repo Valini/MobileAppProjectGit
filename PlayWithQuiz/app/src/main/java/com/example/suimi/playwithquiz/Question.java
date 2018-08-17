@@ -29,12 +29,30 @@ public class Question {
         return question;
     }
 
-    public String getNthChoiceStr(int position){
-        return choices[choicesOrder[position]];
+    public String getAnswer() { return answer; }
+
+    public int getAnswerIdx(){
+        for(int i=0; i < NO_OF_CHOICES; i++){
+            if (answer.equals(choices[i]))  return i;
+        }
+
+        return -1;
     }
 
-    public void setNthChoiceStr(int position, String text){
-        choices[position] = text;
+    public void addChoice(String c){
+        Random rand = new Random();
+
+        while(true) {
+            int n = rand.nextInt(NO_OF_CHOICES);
+            if (choices[n] == null || choices[n].length() <= 0) {
+                choices[n] = c;
+                break;
+            }
+        }
+    }
+
+    public String getNthChoice(int nth){
+        return choices[nth];
     }
 
     public void setAnswer(String a){
@@ -42,11 +60,10 @@ public class Question {
     }
 
     public boolean isCorrectAnswer(int a){
-        for(int i=0; i < NO_OF_CHOICES; i++){
-            if(choicesOrder[i] == a && choices[i].equals(answer)){
-                return true;
-            }
-        }
+        if ( a < 0 || a > NO_OF_CHOICES)    return false;
+
+
+        if(choices[a].equals(answer))   return true;
 
         return false;
     }
@@ -58,25 +75,4 @@ public class Question {
         return false;
     }
 
-
-    public void makeChoiceOrder(){
-        Random rand = new Random();
-        int i = 0;
-
-        while(i < 4) {
-            boolean isDone = true;
-            int n = rand.nextInt(NO_OF_CHOICES);
-            for(int j=0; j < i; j++) {
-                if(choicesOrder[j] == n) {
-                    isDone = false;
-                    break;
-                }
-                if(!isDone) break;
-            }
-            if (isDone) {
-                choicesOrder[i] = n;
-                i++;
-            }
-        }
-    }
 }

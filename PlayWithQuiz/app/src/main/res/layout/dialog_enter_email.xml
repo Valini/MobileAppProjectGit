@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="20dp">
+    android:padding="15dp">
 
     <TextView
         android:id="@+id/editText2"
@@ -15,17 +15,18 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Enter your email address"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="110dp"
         tools:layout_editor_absoluteY="149dp" />
 
     <EditText
         android:id="@+id/etEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="278dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/btnStart"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp"
+        android:layout_marginBottom="-124dp"
         android:ems="10"
         android:inputType="textEmailAddress"
         tools:ignore="MissingConstraints"
@@ -38,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="156dp"
         android:text="Start"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="148dp"

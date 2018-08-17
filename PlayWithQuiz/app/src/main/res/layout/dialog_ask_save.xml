@@ -5,12 +5,12 @@
     android:padding="30dp">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Do you want to save your score and send an email to you?"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <Button
         android:id="@+id/btnSave"

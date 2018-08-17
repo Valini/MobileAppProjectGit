@@ -1,31 +1,25 @@
 package com.example.suimi.playwithquiz;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.view.Menu;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class HistoryDbHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "scoredb.db";
-     private SQLiteDatabase db;
-
-     /*
-    public HistoryDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
-        super(context, name, factory, version);
-    }*/
+    private SQLiteDatabase db;
 
     public HistoryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-/*
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table history (email text, score integer, date text, difficulty integer)");
-    }
-    */
 
     static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + QuizContract.QuizTable.TABLE_NAME + " (" +
@@ -46,18 +40,31 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
             db.execSQL(SQL_CREATE_ENTRIES);
 
         }
-     /*
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("drop table if exists history");
-        onCreate(sqLiteDatabase);
-    }
-    */
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
-        }
+    }
+
+
+    public void saveScoreToDB(String email, int score, int difficulty){
+        // Gets the data repository in write mode
+        SQLiteDatabase db = getWritableDatabase();
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(QuizContract.QuizTable.COLUMN_EMAIL, email);
+        values.put(QuizContract.QuizTable.COLUMN_SCORE, score);
+        values.put(QuizContract.QuizTable.COLUMN_DATE, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        values.put(QuizContract.QuizTable.COLUMN_DIFFICULTY, difficulty);
+        //Insert the new row, returning the primary key value of the new row
+        long newRowId = db.insert(QuizContract.QuizTable.TABLE_NAME, null, values);
+
+
+        //print the id of the new row inserted
+        Log.i(MenuActivity.LOG_TAG, "Row Number is " +newRowId);
+    }
+
 }
