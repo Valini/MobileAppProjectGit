@@ -1,17 +1,18 @@
 package com.example.suimi.playwithquiz;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +30,7 @@ public class PalyGameActivity extends MenuActivity {
 
     private ViewPager mSlideViewPage;
     private LinearLayout mDotLayout;
+    private Button btnSubmit;
 
     private SliderAdapter sliderAdapter;
 
@@ -44,29 +46,36 @@ public class PalyGameActivity extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paly_game);
-        // custom dialog
-//        final Dialog dialog = new Dialog(this);
-//        dialog.setContentView(R.layout.dialog_enter_email);
-//        dialog.setTitle("Enter Email");
-//
-//        // set the custom dialog components - text, button
-//        Button dialogButton = (Button)dialog.findViewById(R.id.btnStart);
-//        dialogButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                EditText etEmail = dialog.findViewById(R.id.etEmail);
-//                currentUser = etEmail.getText().toString();
-//
-//                getQuestions();
-//
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        dialog.show();
+        btnSubmit = findViewById(R.id.btnSubmit);
+
         getQuestions();
     }
 
+    public void ShowAskSaveDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_ask_save);
+        dialog.setTitle("Info");
+
+        // set the custom dialog components - text, button
+        Button saveButton = dialog.findViewById(R.id.btnSave);
+        Button cancelButton = dialog.findViewById(R.id.btnCancel);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(MenuActivity.LOG_TAG, "Saving... and Sending an email...");
+                dialog.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
     // make query to get questions using api from trivia
     public void getQuestions(){
         URL apiUrl;
@@ -108,6 +117,37 @@ public class PalyGameActivity extends MenuActivity {
         }
     }
 
+    // event handler for clicking button SUBMIT
+    public void submitUserAnswers(View view){
+        // make score using user's answers
+        int score = 0;
+        int[] userAnswer = sliderAdapter.userAnswer;
+        for(int i=0; i < userAnswer.length; i++){
+            View pageView = sliderAdapter.getPageItem(i);
+
+
+            if (pageView != null){
+                RadioGroup rgChoices = pageView.findViewById(R.id.rgChoices);
+                int id = rgChoices.getCheckedRadioButtonId();
+
+                if(id != -1) {
+                    if (id == R.id.rbChoice1) userAnswer[i] = 0;
+                    else if (id == R.id.rbChoice2) userAnswer[i] = 1;
+                    else if (id == R.id.rbChoice3) userAnswer[i] = 2;
+                    else if (id == R.id.rbChoice4) userAnswer[i] = 3;
+
+                    Question q = questionList.get(i);
+                    if(q.isCorrectAnswer(userAnswer[i])) score++;
+                }
+            }
+        }
+
+        Log.i("PlayWithQuiz", "SCORE : " + score);
+        ShowAskSaveDialog();
+    }
+
+
+
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int i, float v, int i1) {
@@ -117,6 +157,13 @@ public class PalyGameActivity extends MenuActivity {
         @Override
         public void onPageSelected(int i) {
             addDotsIndicator(i);
+
+            if(i == 4){
+                btnSubmit.setVisibility(View.VISIBLE);
+            }else{
+                btnSubmit.setVisibility(View.INVISIBLE);
+            }
+
         }
 
         @Override

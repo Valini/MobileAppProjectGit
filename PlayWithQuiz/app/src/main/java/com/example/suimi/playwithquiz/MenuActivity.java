@@ -1,6 +1,7 @@
 package com.example.suimi.playwithquiz;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.widget.EditText;
 import java.util.Random;
 
 public class MenuActivity extends AppCompatActivity {
+
+    public static String LOG_TAG = "PlayWithQuiz";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +65,6 @@ public class MenuActivity extends AppCompatActivity {
                 //getQuestions();
                 Intent intentPlayGame = new Intent(MenuActivity.this, PalyGameActivity.class);
                 intentPlayGame.putExtra(Intent.EXTRA_TEXT, etEmail.getText().toString());
-//        intentPlayGame.putExtra(Intent.EXTRA_SUBJECT, "Comp science");
                 startActivity(intentPlayGame);
                 dialog.dismiss();
             }
