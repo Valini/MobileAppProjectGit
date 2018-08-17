@@ -13,17 +13,6 @@
         android:padding="40dp"
         android:text="What is Lorem Ipsum?" />
 
-    <Button
-        android:id="@+id/btnBubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="submitUserAnswers"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="88dp"
-        android:text="Submit"
-        android:visibility="invisible" />
-
     <RadioGroup
         android:id="@+id/rgChoices"
         android:layout_width="265dp"
