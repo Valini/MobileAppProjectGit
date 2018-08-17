@@ -134,7 +134,7 @@ public class PalyGameActivity extends MenuActivity {
         mDotLayout.removeAllViews();
         for(int i=0; i < mDots.length; i++){
             mDots[i] = new TextView(this);
-            mDots[i].setText(Html.fromHtml("&#8226;"));
+            mDots[i].setText(Html.fromHtml(";&#8226"));
             mDots[i].setTextSize(35);
             mDots[i].setTextColor(getResources().getColor(R.color.colorAccent));
 
