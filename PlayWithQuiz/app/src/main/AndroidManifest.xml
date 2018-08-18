@@ -18,10 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HistoryActivity" android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.suimi.playwithquiz.MainActivity" />
+        <activity android:name=".HistoryActivity"
+            android:parentActivityName="com.example.suimi.playwithquiz.MainActivity">
+
         </activity>
         <activity android:name=".PlayGameActivity"  android:parentActivityName=".MainActivity">
             <meta-data

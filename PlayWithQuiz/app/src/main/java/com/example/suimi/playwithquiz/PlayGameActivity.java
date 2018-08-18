@@ -159,8 +159,6 @@ public class PlayGameActivity extends MenuActivity {
                 dbHelper.saveScoreToDB(mCurrentUser, score, difficulty);
 
                 sendEmail();
-
-
                 dialog.dismiss();
             }
         });

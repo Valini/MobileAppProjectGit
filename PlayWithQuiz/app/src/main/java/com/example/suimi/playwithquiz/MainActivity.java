@@ -20,4 +20,5 @@ public class MainActivity extends MenuActivity {
 
         ShowEmailEnteringDialog();
     }
+
 }
