@@ -9,7 +9,7 @@
         android:layout_height="219dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="11dp"
         android:padding="40dp"
         android:text="What is Lorem Ipsum?"
         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title" />
@@ -20,7 +20,7 @@
         android:layout_height="200dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="65dp">
+        android:layout_marginBottom="33dp">
 
         <RadioButton
             android:id="@+id/rbChoice1"

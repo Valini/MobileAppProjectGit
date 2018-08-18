@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -62,6 +63,10 @@ public class HistoryActivity extends MenuActivity {
         myRcView.setLayoutManager(new LinearLayoutManager(this));
 
 
+    }
+
+    public void onBackPressed (){
+        NavUtils.navigateUpTo(this, NavUtils.getParentActivityIntent(this));
     }
 
 
