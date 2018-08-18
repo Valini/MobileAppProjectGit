@@ -8,6 +8,8 @@ import android.provider.BaseColumns;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -27,7 +29,7 @@ import java.util.Locale;
 public class HistoryActivity extends MenuActivity {
     HistoryDbHelper dbHelper;
     SQLiteDatabase db;
-    List<History> scoreList = new ArrayList();
+    ArrayList<History> scoreList = new ArrayList<>();
 
 
     @Override
@@ -46,6 +48,20 @@ public class HistoryActivity extends MenuActivity {
 
         //fetch Data Async
         new FetchScoreData().execute();
+        initRecylerView();
+
+
+    }
+
+    public void initRecylerView(){
+        RecyclerView myRcView = findViewById(R.id.rc_view);
+        ScoreAdapter scoreAdapter = new ScoreAdapter(scoreList);
+
+        // studentAdapter.studentList = studentList;
+
+        myRcView.setAdapter(scoreAdapter);
+        myRcView.setLayoutManager(new LinearLayoutManager(this));
+
 
     }
 
@@ -161,7 +177,7 @@ public class HistoryActivity extends MenuActivity {
 
     }
 
-    public class FetchScoreData extends AsyncTask<String, Void, List<History>> {
+    public class FetchScoreData extends AsyncTask<String, Void, ArrayList<History>> {
 
         @Override
         protected void onPreExecute() {
@@ -173,7 +189,7 @@ public class HistoryActivity extends MenuActivity {
 
 
         @Override
-        protected List<History> doInBackground(String... values) {
+        protected ArrayList<History> doInBackground(String... values) {
 
 
             String[] projection = {
@@ -225,12 +241,15 @@ public class HistoryActivity extends MenuActivity {
         }
 
         @Override
-        protected void onPostExecute(List<History> scoreList) {
+        protected void onPostExecute(ArrayList<History> scoreList) {
             TextView tvResults = findViewById(R.id.tv_results);
             for (int i = 0; i < scoreList.size(); i++) {
                 History scores = (History) scoreList.get(i);
-                tvResults.append(scores.getId()+ "||" + scores.getEmail() + "||" + scores.getDate() + "||" + scores.getDifficulty() + "\n");
+                tvResults.append(scores.getId()+ "||" + scores.getEmail() + "||" + scores.getScore() + "||"+ scores.getDate() + "||" + scores.getDifficulty() + "\n");
             }
+
+
+
 
         }
     }
