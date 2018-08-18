@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Quiz Whiz</string>
-    <string name="welcome">Welcome to Quiz Whiz</string>
+    <string name="welcome">with</string>
+
 </resources>

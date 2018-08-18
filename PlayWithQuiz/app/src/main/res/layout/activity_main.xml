@@ -10,11 +10,32 @@
 
 
     <ImageView
-        android:id="@+id/phone_icon"
+        android:id="@+id/quiz_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:src="@drawable/quiz"/>
+    <TextView
+        android:id="@+id/quizqhiz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome"
+        android:fontFamily="@font/gomarice_no_continue"
+        android:textSize="50sp"
+        android:textAllCaps="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/quiz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:fontFamily="@font/gomarice_no_continue"
+        android:textSize="100sp"
+        android:textAllCaps="true"
+        android:textColor="@color/dark_violet"
+        android:gravity="center"/>
 
 
 </LinearLayout>

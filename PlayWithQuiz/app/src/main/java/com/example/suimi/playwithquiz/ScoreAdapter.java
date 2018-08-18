@@ -29,10 +29,19 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
 
     @Override
     public void onBindViewHolder(@NonNull OneItemViewHolder oneItemViewHolder, final int i) {
+<<<<<<< HEAD
         oneItemViewHolder.tvOneItem.setText(scoreList.get(i).getEmail());
         oneItemViewHolder.tvSecondItem.setText(scoreList.get(i).getScore()+"");
         oneItemViewHolder.tvThirdItem.setText(scoreList.get(i).getDate());
         oneItemViewHolder.tvFourthItem.setText(scoreList.get(i).getDifficultyStr());
+=======
+
+       // oneItemViewHolder.tvOne.setText(scoreList.get(i).getId()+"");
+        oneItemViewHolder.tvOneItemEmail.setText(scoreList.get(i).getEmail());
+        oneItemViewHolder.tvSecondItemScore.setText(scoreList.get(i).getScore()+""+" / 5");
+        oneItemViewHolder.tvThirdItemDate.setText(scoreList.get(i).getDate());
+        oneItemViewHolder.tvFourthItemDifficulty.setText(scoreList.get(i).getDifficultyStr());
+>>>>>>> origin/master
         oneItemViewHolder.singleItemParentLayout.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View view){
@@ -52,19 +61,19 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
 
             class OneItemViewHolder extends RecyclerView.ViewHolder {
                 TextView tvOne;
-                TextView tvOneItem;
-                TextView tvSecondItem;
-                TextView tvThirdItem;
-                TextView tvFourthItem;
+                TextView tvOneItemEmail;
+                TextView tvSecondItemScore;
+                TextView tvThirdItemDate;
+                TextView tvFourthItemDifficulty;
 
                 FrameLayout singleItemParentLayout;
 
                 public OneItemViewHolder(@NonNull View itemView) {
                     super(itemView);
-                    tvOneItem = itemView.findViewById(R.id.tv_in_item);
-                    tvSecondItem = itemView.findViewById(R.id.tv_in_item2);
-                    tvThirdItem = itemView.findViewById(R.id.tv_in_item3);
-                    tvFourthItem = itemView.findViewById(R.id.tv_in_item4);
+                    tvOneItemEmail = itemView.findViewById(R.id.tv_in_itemEmail);
+                    tvSecondItemScore = itemView.findViewById(R.id.tv_in_item2Score);
+                    tvThirdItemDate = itemView.findViewById(R.id.tv_in_item3Date);
+                    tvFourthItemDifficulty = itemView.findViewById(R.id.tv_in_item4Difficulty);
                     singleItemParentLayout = itemView.findViewById(R.id.single_item_parent_layout);
                 }
 
