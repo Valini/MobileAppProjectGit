@@ -3,6 +3,7 @@ package com.example.suimi.playwithquiz;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.text.Html;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,17 +23,22 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
-public class PalyGameActivity extends MenuActivity {
+public class PlayGameActivity extends MenuActivity {
     static int NO_OF_QUESTIONS = 5;
+    public String mDifficulty = "easy";     // 1 - Easy, 2 - Medium, 3 - Hard
 
-    String currentUser = "";
-    String jsonString;
-    boolean isInstanceStateSaved = false;
+    // Store user's email address
+    String mCurrentUser = "";
+    // Store jsonstring from api call -> this is for processing to restore data when resume the activity
+    String mJsonString;
+    // need restore or not(true-restore, false-don't need to restore)
+    boolean mIsInstanceStateSaved = false;
 
     private ViewPager mSlideViewPage;
     private LinearLayout mDotLayout;
-    private Button btnSubmit;
+    private Button mBtnSubmit;
 
     private SliderAdapter sliderAdapter;
 
@@ -50,22 +57,23 @@ public class PalyGameActivity extends MenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paly_game);
 
-        if(savedInstanceState != null)
-            isInstanceStateSaved = true;
 
-        btnSubmit = findViewById(R.id.btnSubmit);
+        if(savedInstanceState != null)
+            mIsInstanceStateSaved = true;
+
+        mBtnSubmit = findViewById(R.id.btnSubmit);
 
         // fetch email address passed by dialog(MainActivity)
         Intent intentReceived = getIntent();
         if(intentReceived.hasExtra(Intent.EXTRA_TEXT)){
-            currentUser = intentReceived.getStringExtra(Intent.EXTRA_TEXT);
+            mCurrentUser = intentReceived.getStringExtra(Intent.EXTRA_TEXT);
+        }
+        if(intentReceived.hasExtra(Intent.EXTRA_SUBJECT)){
+            mDifficulty = intentReceived.getStringExtra(Intent.EXTRA_SUBJECT);
         }
 
-        userAnswer = new int[PalyGameActivity.NO_OF_QUESTIONS];
-        for(int i=0; i < userAnswer.length; i++)
-            userAnswer[i] = -1;
 
-        Log.i("Suim", "On Create");
+        Log.i(MenuActivity.LOG_TAG, "On Create");
 
     }
 
@@ -73,14 +81,12 @@ public class PalyGameActivity extends MenuActivity {
     protected  void onResume(){
         super.onResume();
 
-        if(!isInstanceStateSaved)
+        if(!mIsInstanceStateSaved)
             getQuestions();
         else {
             parseJSONString();
-
-            //sliderAdapter.pa
         }
-        Log.i("Suim", "On Resume");
+        Log.i(MenuActivity.LOG_TAG, "On Resume");
 
     }
 
@@ -88,23 +94,28 @@ public class PalyGameActivity extends MenuActivity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        getUserAnswer();
+        userAnswer = sliderAdapter.userAnswer;
 
-        outState.putString("JSON_QUIZ", jsonString);
+        outState.putString("JSON_QUIZ", mJsonString);
         outState.putIntArray("USER_ANSWERS", userAnswer);
 
-        Log.i("Suim",  "In onSaveInstanceState");
+        Log.i(MenuActivity.LOG_TAG,  "In onSaveInstanceState");
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        jsonString = savedInstanceState.getString("JSON_QUIZ");
+        mJsonString = savedInstanceState.getString("JSON_QUIZ");
         userAnswer = savedInstanceState.getIntArray("USER_ANSWERS");
 
-        Log.i("Suim",  "In onRestoreInstanceState");
+        Log.i(MenuActivity.LOG_TAG,  "In onRestoreInstanceState");
     }
 
+
+    @Override
+    public void onBackPressed (){
+        NavUtils.navigateUpTo(this, NavUtils.getParentActivityIntent(this));
+    }
 
 
     public void ShowAskSaveDialog(){
@@ -121,7 +132,7 @@ public class PalyGameActivity extends MenuActivity {
 
         TextView tvInfo = dialog.findViewById(R.id.tvInfo);
         if(!isAnsweredAll) {
-            tvInfo.setText("Score : " + score + "/" + NO_OF_QUESTIONS + "\nYou didn't answer all question.\nDo you want to save though?");
+            tvInfo.setText("Score : " + score + "/" + NO_OF_QUESTIONS + "\nSave as missing question?");
         }else{
             tvInfo.setText("Score : " + score + "/" + NO_OF_QUESTIONS + "\nDo you want to save?");
         }
@@ -133,8 +144,12 @@ public class PalyGameActivity extends MenuActivity {
             @Override
             public void onClick(View view) {
                 Log.i(MenuActivity.LOG_TAG, "Saving... and Sending an email...");
-                HistoryDbHelper dbHelper = new HistoryDbHelper(PalyGameActivity.this);
-                dbHelper.saveScoreToDB(currentUser, score, 0);
+                HistoryDbHelper dbHelper = new HistoryDbHelper(PlayGameActivity.this);
+                dbHelper.saveScoreToDB(mCurrentUser, score, 0);
+
+                sendEmail();
+
+
                 dialog.dismiss();
             }
         });
@@ -153,7 +168,8 @@ public class PalyGameActivity extends MenuActivity {
     public void getQuestions(){
         URL apiUrl;
         try {
-            apiUrl = new URL("https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple");
+            apiUrl = new URL("https://opentdb.com/api.php?amount=5&difficulty=" + mDifficulty + "&type=multiple");
+            Log.i(MenuActivity.LOG_TAG, "https://opentdb.com/api.php?amount=5&difficulty=" + mDifficulty + "&type=multiple");
             new FetchDataFromApi().execute(apiUrl);
         }catch (MalformedURLException ex){
             ex.printStackTrace();
@@ -165,6 +181,10 @@ public class PalyGameActivity extends MenuActivity {
         mDotLayout = findViewById(R.id.dotsLayout);
 
         sliderAdapter = new SliderAdapter(this, questionList);
+
+        if(mIsInstanceStateSaved)
+            sliderAdapter.userAnswer = userAnswer;
+
 
         mSlideViewPage.setAdapter(sliderAdapter);
 
@@ -178,7 +198,7 @@ public class PalyGameActivity extends MenuActivity {
         mDotLayout.removeAllViews();
         for(int i=0; i < mDots.length; i++){
             mDots[i] = new TextView(this);
-            mDots[i].setText(Html.fromHtml(";&#8226"));
+            mDots[i].setText(Html.fromHtml("&#8226;"));
             mDots[i].setTextSize(35);
             mDots[i].setTextColor(getResources().getColor(R.color.colorAccent));
 
@@ -193,7 +213,7 @@ public class PalyGameActivity extends MenuActivity {
     // event handler for clicking button SUBMIT
     public void submitUserAnswers(View view){
         // make score using user's answers
-        getUserAnswer();
+        userAnswer = sliderAdapter.userAnswer;
         score = 0;
         for(int i=0; i < userAnswer.length; i++){
             View pageView = sliderAdapter.getPageItem(i);
@@ -202,33 +222,19 @@ public class PalyGameActivity extends MenuActivity {
                 Question q = questionList.get(i);
                 if(q.isCorrectAnswer(userAnswer[i])) score++;
 
-                Log.i(MenuActivity.LOG_TAG, "\n" + "Question No." + (i+1) + " - " +
-                        q.getNthChoice(userAnswer[i]) + " : " + q.getAnswer() + "(" + q.getAnswerIdx() + ")");
-            }
-        }
-
-        Log.i("PlayWithQuiz", "SCORE : " + score);
-        ShowAskSaveDialog();
-    }
-
-    public void getUserAnswer(){
-        for(int i=0; i < userAnswer.length; i++){
-            View pageView = sliderAdapter.getPageItem(i);
-
-            if (pageView != null){
-                RadioGroup rgChoices = pageView.findViewById(R.id.rgChoices);
-                int id = rgChoices.getCheckedRadioButtonId();
-
-                if(id != -1) {
-                    if (id == R.id.rbChoice1) userAnswer[i] = 0;
-                    else if (id == R.id.rbChoice2) userAnswer[i] = 1;
-                    else if (id == R.id.rbChoice3) userAnswer[i] = 2;
-                    else if (id == R.id.rbChoice4) userAnswer[i] = 3;
+                if(userAnswer[i] >= 0) {
+                    Log.i(MenuActivity.LOG_TAG, "\n" + "Question No." + (i + 1) + " - " +
+                            q.getNthChoice(userAnswer[i]) + " : " + q.getAnswer() + "(" + q.getAnswerIdx() + ")");
+                }else{
+                    Log.i(MenuActivity.LOG_TAG, "User haven't answered this question.\n");
                 }
             }
         }
 
+        Log.i(MenuActivity.LOG_TAG, "SCORE : " + score);
+        ShowAskSaveDialog();
     }
+
 
     private String replaceSpecialCharater(String s){
         // eliminate spacial characters
@@ -239,7 +245,8 @@ public class PalyGameActivity extends MenuActivity {
         s = s.replace("&quot;", "'");
         s = s.replace("&#039;", "'");
         s = s.replace("&eacute;", "é");
-
+        s = s.replace("&shy;", "-");
+        s = s.replace("&#173;", "-");
         return s;
     }
 
@@ -255,12 +262,12 @@ public class PalyGameActivity extends MenuActivity {
 
             if(position == 4){
                 // Check user answered all question
-                btnSubmit.setVisibility(View.VISIBLE);
+                mBtnSubmit.setVisibility(View.VISIBLE);
             }else{
-                btnSubmit.setVisibility(View.INVISIBLE);
+                mBtnSubmit.setVisibility(View.INVISIBLE);
             }
 
-            getUserAnswer();
+            userAnswer = sliderAdapter.userAnswer;
 
             if(userAnswer[position] > -1){
                 RadioGroup rgChoices = sliderAdapter.getPageItem(position).findViewById(R.id.rgChoices);
@@ -307,7 +314,7 @@ public class PalyGameActivity extends MenuActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            jsonString = s;
+            mJsonString = s;
 
             parseJSONString();
         }
@@ -318,9 +325,9 @@ public class PalyGameActivity extends MenuActivity {
         questionList = new ArrayList<>();
 
         try {
-            jsonString = replaceSpecialCharater(jsonString);
+            mJsonString = replaceSpecialCharater(mJsonString);
             // Convert string to JSONObject
-            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONObject jsonObject = new JSONObject(mJsonString);
             // Get only results part as a string
             String results = jsonObject.getString("results");
             // Make array with results string
@@ -350,6 +357,41 @@ public class PalyGameActivity extends MenuActivity {
             createSlides();
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+    }
+
+    public void sendEmail(){
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        //i.setData(Uri.parse("mailto:"));
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{mCurrentUser});
+        i.putExtra(Intent.EXTRA_SUBJECT, "Quiz Whiz");
+        i.putExtra(Intent.EXTRA_TEXT   , "Quiz Whiz : Game Score - [" + score + "]");
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+
+            new WaitEmail().execute();
+
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(PlayGameActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public class WaitEmail extends AsyncTask<String, Void, List<History>> {
+        @Override
+        protected List<History> doInBackground(String... strings) {
+            try {
+                Thread.sleep(10000);
+
+                Intent intentHistory = new Intent(PlayGameActivity.this, HistoryActivity.class);
+                startActivity(intentHistory);
+
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return null;
         }
 
     }

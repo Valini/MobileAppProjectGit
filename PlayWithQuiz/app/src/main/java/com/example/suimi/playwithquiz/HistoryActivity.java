@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,6 +47,10 @@ public class HistoryActivity extends MenuActivity {
         //fetch Data Async
         new FetchScoreData().execute();
 
+    }
+
+    public void onBackPressed (){
+        NavUtils.navigateUpTo(this, NavUtils.getParentActivityIntent(this));
     }
 
 
