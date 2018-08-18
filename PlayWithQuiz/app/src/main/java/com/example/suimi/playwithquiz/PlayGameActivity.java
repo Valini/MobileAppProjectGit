@@ -145,7 +145,18 @@ public class PlayGameActivity extends MenuActivity {
             public void onClick(View view) {
                 Log.i(MenuActivity.LOG_TAG, "Saving... and Sending an email...");
                 HistoryDbHelper dbHelper = new HistoryDbHelper(PlayGameActivity.this);
-                dbHelper.saveScoreToDB(mCurrentUser, score, 0);
+                int difficulty=0;
+                if (mDifficulty.equalsIgnoreCase("easy")){
+                    difficulty=0;
+                }
+                else if (mDifficulty.equalsIgnoreCase("medium")){
+                    difficulty=1;
+                }
+                else if (mDifficulty.equalsIgnoreCase("hard")) {
+                    difficulty=2;
+                }
+
+                dbHelper.saveScoreToDB(mCurrentUser, score, difficulty);
 
                 sendEmail();
 
