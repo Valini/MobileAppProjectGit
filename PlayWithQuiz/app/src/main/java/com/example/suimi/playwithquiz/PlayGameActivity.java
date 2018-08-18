@@ -177,6 +177,10 @@ public class PlayGameActivity extends MenuActivity {
     }
 
     public void createSlides(){
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
         mSlideViewPage = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);
 
