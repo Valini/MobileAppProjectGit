@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.stetho.Stetho;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +38,7 @@ public class HistoryActivity extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-
+        Stetho.initializeWithDefaults(this);
         dbHelper = new HistoryDbHelper(this);
          db =dbHelper.getReadableDatabase();
 
@@ -48,7 +50,7 @@ public class HistoryActivity extends MenuActivity {
 
         //fetch Data Async
         new FetchScoreData().execute();
-        initRecylerView();
+
 
 
     }
@@ -242,6 +244,7 @@ public class HistoryActivity extends MenuActivity {
 
         @Override
         protected void onPostExecute(ArrayList<History> scoreList) {
+            initRecylerView();
             TextView tvResults = findViewById(R.id.tv_results);
             for (int i = 0; i < scoreList.size(); i++) {
                 History scores = (History) scoreList.get(i);
