@@ -1,45 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
     android:layout_alignParentStart="true"
+    android:orientation="vertical"
     android:id="@+id/single_item_parent_layout">
-
-    <TextView
-        android:id="@+id/tv_in_item"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="tv"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:orientation="horizontal"
+        android:layout_gravity="top">
 
-    <TextView
-        android:id="@+id/tv_in_item2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:padding="16dp"
-        android:text="tv"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        <TextView
+            android:id="@+id/tv_in_itemEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="25dp"
+            android:text="tv"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/holo_green_light"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv_in_item3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="200dp"
-        android:padding="16dp"
-        android:text="tv"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        <TextView
+            android:id="@+id/tv_in_item2Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:layout_marginRight="50dp"
+            android:text="tv"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/holo_red_dark"
+            android:textStyle="bold" />
+</RelativeLayout>
 
-    <TextView
-        android:id="@+id/tv_in_item4"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="200dp"
-        android:padding="16dp"
-        android:text="tv"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:orientation="horizontal"
+        android:layout_gravity="bottom">
+
+        <TextView
+            android:id="@+id/tv_in_item3Date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_alignParentTop="true"
+            android:text="tv"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/holo_blue_light" />
+
+        <TextView
+            android:id="@+id/tv_in_item4Difficulty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50dp"
+            android:text="tv"
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/blue_violet" />
+    </RelativeLayout>
+
+
+
 
     <View
         android:id="@+id/divider"
