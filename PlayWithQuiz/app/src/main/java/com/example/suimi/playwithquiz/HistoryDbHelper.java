@@ -9,6 +9,7 @@ import android.view.Menu;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 
 public class HistoryDbHelper extends SQLiteOpenHelper {
@@ -53,11 +54,14 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
         // Gets the data repository in write mode
         SQLiteDatabase db = getWritableDatabase();
 
+        SimpleDateFormat currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        currentTime.setTimeZone(TimeZone.getTimeZone("GMT-04:00"));
+
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(QuizContract.QuizTable.COLUMN_EMAIL, email);
         values.put(QuizContract.QuizTable.COLUMN_SCORE, score);
-        values.put(QuizContract.QuizTable.COLUMN_DATE, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        values.put(QuizContract.QuizTable.COLUMN_DATE, currentTime.format(new Date()));
         values.put(QuizContract.QuizTable.COLUMN_DIFFICULTY, difficulty);
         //Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(QuizContract.QuizTable.TABLE_NAME, null, values);
