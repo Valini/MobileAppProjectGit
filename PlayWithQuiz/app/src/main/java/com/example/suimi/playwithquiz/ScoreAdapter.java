@@ -29,12 +29,6 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
 
     @Override
     public void onBindViewHolder(@NonNull OneItemViewHolder oneItemViewHolder, final int i) {
-<<<<<<< HEAD
-
-        //oneItemViewHolder.tvOne.setText(scoreList.get(i).getId());
-=======
-       //oneItemViewHolder.tvOne.setText(scoreList.get(i).getId()+"");
->>>>>>> origin/master
         oneItemViewHolder.tvOneItem.setText(scoreList.get(i).getEmail());
         oneItemViewHolder.tvSecondItem.setText(scoreList.get(i).getScore()+"");
         oneItemViewHolder.tvThirdItem.setText(scoreList.get(i).getDate());

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -72,6 +73,23 @@ public class SliderAdapter extends PagerAdapter {
         rbChoice2.setText(q.getNthChoice(1));
         rbChoice3.setText(q.getNthChoice(2));
         rbChoice4.setText(q.getNthChoice(3));
+
+        Button btnSubmit = view.findViewById(R.id.btnSubmit);
+
+        if(position == 4){
+            // Check user answered all question
+            btnSubmit.setVisibility(View.VISIBLE);
+
+            btnSubmit.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    ((PlayGameActivity)mContext).submitUserAnswers(v);
+                }
+            });
+        }else{
+            btnSubmit.setVisibility(View.INVISIBLE);
+        }
 
         // When phone is rotated, app display user's selection
         // if there are user's choice then check the radio button user selected

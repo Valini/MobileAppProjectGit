@@ -61,7 +61,6 @@ public class PlayGameActivity extends MenuActivity {
         if(savedInstanceState != null)
             mIsInstanceStateSaved = true;
 
-        mBtnSubmit = findViewById(R.id.btnSubmit);
 
         // fetch email address passed by dialog(MainActivity)
         Intent intentReceived = getIntent();
@@ -116,6 +115,33 @@ public class PlayGameActivity extends MenuActivity {
     public void onBackPressed (){
         NavUtils.navigateUpTo(this, NavUtils.getParentActivityIntent(this));
     }
+
+
+    // event handler for clicking button SUBMIT
+    public void submitUserAnswers(View view){
+        // make score using user's answers
+        userAnswer = sliderAdapter.userAnswer;
+        score = 0;
+        for(int i=0; i < userAnswer.length; i++){
+            View pageView = sliderAdapter.getPageItem(i);
+
+            if (pageView != null){
+                Question q = questionList.get(i);
+                if(q.isCorrectAnswer(userAnswer[i])) score++;
+
+                if(userAnswer[i] >= 0) {
+                    Log.i(MenuActivity.LOG_TAG, "\n" + "Question No." + (i + 1) + " - " +
+                            q.getNthChoice(userAnswer[i]) + " : " + q.getAnswer() + "(" + q.getAnswerIdx() + ")");
+                }else{
+                    Log.i(MenuActivity.LOG_TAG, "User haven't answered this question.\n");
+                }
+            }
+        }
+
+        Log.i(MenuActivity.LOG_TAG, "SCORE : " + score);
+        ShowAskSaveDialog();
+    }
+
 
 
     public void ShowAskSaveDialog(){
@@ -177,10 +203,6 @@ public class PlayGameActivity extends MenuActivity {
     }
 
     public void createSlides(){
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
         mSlideViewPage = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);
 
@@ -214,32 +236,6 @@ public class PlayGameActivity extends MenuActivity {
         }
     }
 
-    // event handler for clicking button SUBMIT
-    public void submitUserAnswers(View view){
-        // make score using user's answers
-        userAnswer = sliderAdapter.userAnswer;
-        score = 0;
-        for(int i=0; i < userAnswer.length; i++){
-            View pageView = sliderAdapter.getPageItem(i);
-
-            if (pageView != null){
-                Question q = questionList.get(i);
-                if(q.isCorrectAnswer(userAnswer[i])) score++;
-
-                if(userAnswer[i] >= 0) {
-                    Log.i(MenuActivity.LOG_TAG, "\n" + "Question No." + (i + 1) + " - " +
-                            q.getNthChoice(userAnswer[i]) + " : " + q.getAnswer() + "(" + q.getAnswerIdx() + ")");
-                }else{
-                    Log.i(MenuActivity.LOG_TAG, "User haven't answered this question.\n");
-                }
-            }
-        }
-
-        Log.i(MenuActivity.LOG_TAG, "SCORE : " + score);
-        ShowAskSaveDialog();
-    }
-
-
     private String replaceSpecialCharater(String s){
         // eliminate spacial characters
         s = s.replace("&nbsp;", " ");
@@ -263,13 +259,6 @@ public class PlayGameActivity extends MenuActivity {
         @Override
         public void onPageSelected(int position) {
             addDotsIndicator(position);
-
-            if(position == 4){
-                // Check user answered all question
-                mBtnSubmit.setVisibility(View.VISIBLE);
-            }else{
-                mBtnSubmit.setVisibility(View.INVISIBLE);
-            }
 
             userAnswer = sliderAdapter.userAnswer;
 

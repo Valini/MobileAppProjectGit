@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tvQuestion"
-        android:layout_width="wrap_content"
-        android:layout_height="167dp"
+        android:layout_width="match_parent"
+        android:layout_height="121dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="11dp"
         android:padding="40dp"
-        android:text="What is Lorem Ipsum?"
+        android:text="What is Lorem Ipsum?What is Lorem Ipsum?What is Lorem Ipsum?"
         android:textSize="20sp" />
 
     <RadioGroup
         android:id="@+id/rgChoices"
-        android:layout_width="311dp"
+        android:layout_width="432dp"
         android:layout_height="200dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="68dp">
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="27dp">
 
         <RadioButton
             android:id="@+id/rbChoice2"
@@ -28,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="RadioButton"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <RadioButton
             android:id="@+id/rbChoice1"
@@ -36,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="RadioButton"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <RadioButton
             android:id="@+id/rbChoice3"
@@ -44,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="RadioButton"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <RadioButton
             android:id="@+id/rbChoice4"
@@ -52,21 +51,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="RadioButton"
-            android:textSize="20sp" />
-
+            android:textSize="18sp" />
     </RadioGroup>
 
     <Button
         android:id="@+id/btnSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/rgChoices"
-        android:layout_below="@+id/rgChoices"
-        android:layout_marginTop="-68dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
         android:layout_weight="1"
         android:onClick="submitUserAnswers"
         android:text="Submit"
         android:visibility="visible" />
-
 
 </RelativeLayout>
