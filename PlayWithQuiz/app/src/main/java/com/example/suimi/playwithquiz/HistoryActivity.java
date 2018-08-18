@@ -54,6 +54,7 @@ public class HistoryActivity extends MenuActivity {
     }
 
     public void initRecylerView(){
+
         RecyclerView myRcView = findViewById(R.id.rc_view);
         ScoreAdapter scoreAdapter = new ScoreAdapter(scoreList);
 
