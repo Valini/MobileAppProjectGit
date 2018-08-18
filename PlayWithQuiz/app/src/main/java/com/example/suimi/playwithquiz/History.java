@@ -65,7 +65,7 @@ public class History {
                 return "EASY";
             case 1:
                 return "MEDIUM";
-            case 3:
+            case 2:
                 return "HARD";
         }
 

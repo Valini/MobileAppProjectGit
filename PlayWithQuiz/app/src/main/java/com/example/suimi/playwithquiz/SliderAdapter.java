@@ -84,7 +84,7 @@ public class SliderAdapter extends PagerAdapter {
 
                 @Override
                 public void onClick(View v) {
-                    ((PlayGameActivity)mContext).submitUserAnswers(v);
+                    ((PlayGameActivity)mContext).submitUserAnswers();
                 }
             });
         }else{

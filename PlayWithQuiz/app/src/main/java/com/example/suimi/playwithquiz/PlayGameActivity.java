@@ -118,7 +118,7 @@ public class PlayGameActivity extends MenuActivity {
 
 
     // event handler for clicking button SUBMIT
-    public void submitUserAnswers(View view){
+    public void submitUserAnswers(){
         // make score using user's answers
         userAnswer = sliderAdapter.userAnswer;
         score = 0;
@@ -212,10 +212,6 @@ public class PlayGameActivity extends MenuActivity {
     }
 
     public void createSlides(){
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
         mSlideViewPage = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);
 
@@ -388,7 +384,7 @@ public class PlayGameActivity extends MenuActivity {
         @Override
         protected List<History> doInBackground(String... strings) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(3000);
 
                 Intent intentHistory = new Intent(PlayGameActivity.this, HistoryActivity.class);
                 startActivity(intentHistory);
