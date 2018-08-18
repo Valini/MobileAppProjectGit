@@ -161,6 +161,7 @@ public class PalyGameActivity extends MenuActivity {
     }
 
     public void createSlides(){
+        /*
         mSlideViewPage = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);
 
@@ -169,7 +170,7 @@ public class PalyGameActivity extends MenuActivity {
         mSlideViewPage.setAdapter(sliderAdapter);
 
         addDotsIndicator(0);
-        mSlideViewPage.addOnPageChangeListener(viewListener);
+        mSlideViewPage.addOnPageChangeListener(viewListener);*/
     }
 
     public void addDotsIndicator(int position){
