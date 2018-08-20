@@ -58,21 +58,6 @@ public class HistoryActivity extends MenuActivity {
     }
 
 
-    public void sendEmail(){
-
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822");
-        //i.setData(Uri.parse("mailto:"));
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{mCurrentUser});
-        i.putExtra(Intent.EXTRA_SUBJECT, "Quiz Whiz");
-        i.putExtra(Intent.EXTRA_TEXT   , mMailString);
-        try {
-            startActivity(Intent.createChooser(i, "Send mail..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(HistoryActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     public void initRecylerView(){
 
         RecyclerView myRcView = findViewById(R.id.rc_view);
@@ -81,7 +66,8 @@ public class HistoryActivity extends MenuActivity {
         myRcView.setLayoutManager(new LinearLayoutManager(this));
 
         if (mCurrentUser.length() > 0 && mMailString.length() >0 ){
-            sendEmail();
+            //sendEmail();
+            new SendEmail().execute();
             mMailString = "";
         }
     }
@@ -162,4 +148,46 @@ public class HistoryActivity extends MenuActivity {
 
         }
     }
+
+    public class SendEmail extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            String senderEmail = "suimiedevelop@gmail.com";
+            String subject = "Quiz Whiz";
+
+            try{
+                GMailSender sender = new GMailSender("suimiedevelop@gmail.com", "suimieDevelop!@#");
+                sender.sendMail(subject, mMailString, senderEmail, mCurrentUser);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void a) {
+            Toast.makeText(HistoryActivity.this, "Email has sent!",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+//    public void sendEmail(){
+//
+//        Intent i = new Intent(Intent.ACTION_SEND);
+//        i.setType("message/rfc822");
+//        //i.setData(Uri.parse("mailto:"));
+//        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{mCurrentUser});
+//        i.putExtra(Intent.EXTRA_SUBJECT, "Quiz Whiz");
+//        i.putExtra(Intent.EXTRA_TEXT   , mMailString);
+//        try {
+//            startActivity(Intent.createChooser(i, "Send mail..."));
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            Toast.makeText(HistoryActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+//        }
+//
+//
+//    }
+
 }
