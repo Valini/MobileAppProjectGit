@@ -57,6 +57,7 @@ public class MenuActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_enter_email);
         dialog.setTitle("Enter Email");
 
+
         // set the custom dialog components - text, button
         final Button dialogButton = (Button)dialog.findViewById(R.id.btnStart);
         dialogButton.setOnClickListener(new View.OnClickListener() {
