@@ -16,7 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -28,6 +31,10 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0-rc01'
+<<<<<<< HEAD
 
 
+=======
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+>>>>>>> 829da8ca216ae8c9d8adca4e49b6c5afad302e7d
 }
