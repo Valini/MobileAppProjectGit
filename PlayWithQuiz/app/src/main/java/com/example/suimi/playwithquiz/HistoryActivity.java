@@ -102,7 +102,11 @@ public class HistoryActivity extends MenuActivity {
                     QuizContract.QuizTable.COLUMN_DATE,
                     QuizContract.QuizTable.COLUMN_DIFFICULTY
             };
+<<<<<<< HEAD
+            String orderby = BaseColumns._ID + " DESC ";
+=======
             String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC";
+>>>>>>> ea324b4a8d3f1318da60a61d95470e727af29946
             Cursor cursor = db.query(
                     QuizContract.QuizTable.TABLE_NAME,   // The table to query
                     projection,                 // The array of columns to return (pass null to get all)
