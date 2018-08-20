@@ -17,7 +17,7 @@ public class MainActivity extends MenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Stetho.initializeWithDefaults(this);
-        
+
         ShowEmailEnteringDialog();
     }
 
