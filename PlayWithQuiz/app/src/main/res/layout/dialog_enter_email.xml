@@ -19,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:buttonTint="@android:color/holo_blue_dark"
             android:text="EASY" />
 
         <RadioButton
@@ -26,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:buttonTint="@android:color/holo_blue_dark"
             android:text="MEDIUM" />
 
         <RadioButton
@@ -33,6 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:buttonTint="@android:color/holo_blue_dark"
             android:text="HARD" />
 
     </RadioGroup>
@@ -72,7 +75,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="171dp"
+        android:background="@android:color/holo_blue_dark"
         android:text="Start"
+        android:textColor="@android:color/background_light"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="247dp" />

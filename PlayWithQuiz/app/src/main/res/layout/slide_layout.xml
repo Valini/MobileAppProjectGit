@@ -27,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:buttonTint="@android:color/holo_blue_dark"
             android:text="RadioButton"
             android:textSize="20sp" />
 
@@ -35,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:buttonTint="@android:color/holo_blue_dark"
             android:text="RadioButton"
             android:textSize="20sp" />
 
@@ -43,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:buttonTint="@android:color/holo_blue_dark"
             android:text="RadioButton"
             android:textSize="20sp" />
 
@@ -51,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:buttonTint="@android:color/holo_blue_dark"
             android:text="RadioButton"
             android:textSize="20sp" />
 
@@ -64,7 +68,7 @@
         android:layout_below="@+id/rgChoices"
         android:layout_marginTop="-68dp"
         android:layout_weight="1"
-        android:background="@color/blue_violet"
+        android:background="@color/holo_blue_dark"
         android:onClick="submitUserAnswers"
         android:text="Submit"
         android:textColor="@android:color/background_light"

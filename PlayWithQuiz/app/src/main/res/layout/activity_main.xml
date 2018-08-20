@@ -34,7 +34,7 @@
         android:fontFamily="@font/gomarice_no_continue"
         android:textSize="100sp"
         android:textAllCaps="true"
-        android:textColor="@color/dark_violet"
+        android:textColor="@android:color/holo_blue_dark"
         android:gravity="center"/>
 
 
