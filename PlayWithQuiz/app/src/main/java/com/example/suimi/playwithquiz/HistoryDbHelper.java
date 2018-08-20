@@ -2,8 +2,10 @@ package com.example.suimi.playwithquiz;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.Menu;
 
@@ -73,4 +75,27 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public String getLastUser(){
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] projection = {
+                "max(" + QuizContract.QuizTable.COLUMN_EMAIL + ")"
+        };
+        Cursor cursor = db.query(
+                QuizContract.QuizTable.TABLE_NAME,   // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                null,               // The columns for the WHERE clause
+                null,           // The values for the WHERE clause
+                null,              // don't group the rows
+                null,              // don't filter by row groups
+                null             // The sort order
+        );
+        cursor.moveToFirst();
+        //save the data from database to scoreList
+        String email = cursor.getString(0);
+
+        db.close();
+
+        return email;
+    }
 }

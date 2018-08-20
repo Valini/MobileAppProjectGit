@@ -22,11 +22,15 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PlayGameActivity extends MenuActivity {
     static int NO_OF_QUESTIONS = 5;
+    private boolean isLoading = false;
     public String mDifficulty = "easy";     // 1 - Easy, 2 - Medium, 3 - Hard
 
     // Store user's email address
@@ -167,7 +171,7 @@ public class PlayGameActivity extends MenuActivity {
 
         TextView tvInfo = dialog.findViewById(R.id.tvInfo);
         if(!isAnsweredAll) {
-            tvInfo.setText("Score : " + score + "/" + NO_OF_QUESTIONS + "\nSave as missing question?");
+            tvInfo.setText("Score : " + score + "/" + NO_OF_QUESTIONS + "\nYou missed some questions. Save?");
         }else{
             tvInfo.setText("Score : " + score + "/" + NO_OF_QUESTIONS + "\nDo you want to save?");
         }
@@ -198,7 +202,6 @@ public class PlayGameActivity extends MenuActivity {
             HistoryDbHelper dbHelper = new HistoryDbHelper(PlayGameActivity.this);
             dbHelper.saveScoreToDB(mCurrentUser, score, difficulty);
 
-//            sendEmail();
             moveToHistoryActivityAndSendEmail();
 
             dialog.dismiss();
@@ -223,6 +226,8 @@ public class PlayGameActivity extends MenuActivity {
             apiUrl = new URL("https://opentdb.com/api.php?amount=5&difficulty=" + mDifficulty + "&type=multiple");
             Log.i(MenuActivity.LOG_TAG, "https://opentdb.com/api.php?amount=5&difficulty=" + mDifficulty + "&type=multiple");
             new FetchDataFromApi().execute(apiUrl);
+
+
         }catch (MalformedURLException ex){
             ex.printStackTrace();
         }
@@ -295,6 +300,14 @@ public class PlayGameActivity extends MenuActivity {
     };
 
     public class FetchDataFromApi extends AsyncTask<URL, Void, String> {
+        TextView tvLoading = findViewById(R.id.tvLoading);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            tvLoading.setVisibility(View.VISIBLE);
+            isLoading = true;
+        }
 
         @Override
         protected String doInBackground(URL... urls) {
@@ -306,6 +319,8 @@ public class PlayGameActivity extends MenuActivity {
                 e.printStackTrace();
             }
 
+            isLoading = false;
+
             return response;
         }
 
@@ -314,6 +329,7 @@ public class PlayGameActivity extends MenuActivity {
         protected void onPostExecute(String s) {
             mJsonString = s;
 
+            tvLoading.setVisibility(View.INVISIBLE);
             parseJSONString();
         }
 
@@ -369,39 +385,6 @@ public class PlayGameActivity extends MenuActivity {
         startActivity(intentHistory);
     }
 
-    public void sendEmail(){
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822");
-        //i.setData(Uri.parse("mailto:"));
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{mCurrentUser});
-        i.putExtra(Intent.EXTRA_SUBJECT, "Quiz Whiz");
-        i.putExtra(Intent.EXTRA_TEXT   , "Quiz Whiz : Game Score - [" + score + "/" + NO_OF_QUESTIONS + "]");
-        try {
-            startActivity(Intent.createChooser(i, "Send mail..."));
 
-            new WaitEmail().execute();
-
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(PlayGameActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public class WaitEmail extends AsyncTask<String, Void, List<History>> {
-        @Override
-        protected List<History> doInBackground(String... strings) {
-            try {
-                Thread.sleep(5000);
-
-                Intent intentHistory = new Intent(PlayGameActivity.this, HistoryActivity.class);
-                startActivity(intentHistory);
-
-            }catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-    }
 }
 

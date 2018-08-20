@@ -53,11 +53,15 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void ShowEmailEnteringDialog(){
+        HistoryDbHelper dbHelper = new HistoryDbHelper(this);
+        String email = dbHelper.getLastUser();
+
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_enter_email);
         dialog.setTitle("Enter Email");
 
-
+        if(email.length() > 0)
+            ((TextView)dialog.findViewById(R.id.etEmail)).setText(email);
         // set the custom dialog components - text, button
         final Button dialogButton = (Button)dialog.findViewById(R.id.btnStart);
         dialogButton.setOnClickListener(new View.OnClickListener() {
