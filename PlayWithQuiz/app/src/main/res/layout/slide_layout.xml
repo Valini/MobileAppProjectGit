@@ -6,7 +6,7 @@
     <TextView
         android:id="@+id/tvQuestion"
         android:layout_width="wrap_content"
-        android:layout_height="167dp"
+        android:layout_height="225dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="11dp"

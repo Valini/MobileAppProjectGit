@@ -38,19 +38,15 @@ public class PlayGameActivity extends MenuActivity {
 
     private ViewPager mSlideViewPage;
     private LinearLayout mDotLayout;
-    private Button mBtnSubmit;
 
-    private SliderAdapter sliderAdapter;
+    private SliderAdapter mSliderAdapter;
 
     private TextView[] mDots;
 
-    private ArrayList<Question> questionList;
+    private ArrayList<Question> mQuestionList;
     public int score;
-    public int[] userAnswer;
+    public int[] mUserAnswer;   // remember user's answers
 
-    public ArrayList<Question> getQuestionList(){
-        return questionList;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +58,7 @@ public class PlayGameActivity extends MenuActivity {
             mIsInstanceStateSaved = true;
 
 
-        // fetch email address passed by dialog(MainActivity)
+        // store email address and difficulty user entered which is passed by dialog(MainActivity)
         Intent intentReceived = getIntent();
         if(intentReceived.hasExtra(Intent.EXTRA_TEXT)){
             mCurrentUser = intentReceived.getStringExtra(Intent.EXTRA_TEXT);
@@ -72,31 +68,39 @@ public class PlayGameActivity extends MenuActivity {
         }
 
 
-        Log.i(MenuActivity.LOG_TAG, "On Create");
-
+        Log.i(MenuActivity.LOG_TAG, "[OnCreate] EMAIL : " + mCurrentUser + " | DIFFICULTY : " + mDifficulty);
     }
 
     @Override
     protected  void onResume(){
         super.onResume();
 
+        // prevent to get Q/A from api when user rotate the phone
         if(!mIsInstanceStateSaved)
+            // Get new Q/A
             getQuestions();
         else {
+            // Use Q/A had before rotate
             parseJSONString();
         }
         Log.i(MenuActivity.LOG_TAG, "On Resume");
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        userAnswer = sliderAdapter.userAnswer;
+        // save email address, data from api and user's selection
+        mUserAnswer = mSliderAdapter.userAnswer;
 
+        outState.putString("EMAIL", mEmail);
         outState.putString("JSON_QUIZ", mJsonString);
-        outState.putIntArray("USER_ANSWERS", userAnswer);
+        outState.putIntArray("USER_ANSWERS", mUserAnswer);
 
         Log.i(MenuActivity.LOG_TAG,  "In onSaveInstanceState");
     }
@@ -104,8 +108,11 @@ public class PlayGameActivity extends MenuActivity {
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
+        // restore the data before stopped
+        mEmail = savedInstanceState.getString("EMAIL");
         mJsonString = savedInstanceState.getString("JSON_QUIZ");
-        userAnswer = savedInstanceState.getIntArray("USER_ANSWERS");
+        mUserAnswer = savedInstanceState.getIntArray("USER_ANSWERS");
 
         Log.i(MenuActivity.LOG_TAG,  "In onRestoreInstanceState");
     }
@@ -119,22 +126,20 @@ public class PlayGameActivity extends MenuActivity {
 
     // event handler for clicking button SUBMIT
     public void submitUserAnswers(){
-        // make score using user's answers
-        userAnswer = sliderAdapter.userAnswer;
+        // get user's Answer from mSliderAdapter(mSliderAdapter keep the user's Answer)
+        mUserAnswer = mSliderAdapter.userAnswer;
+
+        // Calculate score
         score = 0;
-        for(int i=0; i < userAnswer.length; i++){
-            View pageView = sliderAdapter.getPageItem(i);
+        for(int i = 0; i < mUserAnswer.length; i++){
+            Question q = mQuestionList.get(i);
+            if(q.isCorrectAnswer(mUserAnswer[i])) score++;
 
-            if (pageView != null){
-                Question q = questionList.get(i);
-                if(q.isCorrectAnswer(userAnswer[i])) score++;
-
-                if(userAnswer[i] >= 0) {
-                    Log.i(MenuActivity.LOG_TAG, "\n" + "Question No." + (i + 1) + " - " +
-                            q.getNthChoice(userAnswer[i]) + " : " + q.getAnswer() + "(" + q.getAnswerIdx() + ")");
-                }else{
-                    Log.i(MenuActivity.LOG_TAG, "User haven't answered this question.\n");
-                }
+            if(mUserAnswer[i] >= 0) {
+                Log.i(MenuActivity.LOG_TAG, "\n" + "Question No." + (i + 1) + " - " +
+                        q.getNthChoice(mUserAnswer[i]) + " : " + q.getAnswer() + "(" + q.getAnswerIdx() + ")");
+            }else{
+                Log.i(MenuActivity.LOG_TAG, "User haven't answered this question.\n");
             }
         }
 
@@ -146,12 +151,16 @@ public class PlayGameActivity extends MenuActivity {
 
     public void ShowAskSaveDialog(){
         boolean isAnsweredAll = true;
-        for(int i=0; i<userAnswer.length;i++){
-            if(userAnswer[i] == -1){
+
+        // check user answered every questions or not
+        for(int i = 0; i< mUserAnswer.length; i++){
+            if(mUserAnswer[i] == -1){
                 isAnsweredAll = false;
                 break;
             }
         }
+
+        // Display dialog, the message will differ depending on user answered all or not
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_ask_save);
         dialog.setTitle("Info");
@@ -166,29 +175,36 @@ public class PlayGameActivity extends MenuActivity {
         // set the custom dialog components - text, button
         Button saveButton = dialog.findViewById(R.id.btnSave);
         Button cancelButton = dialog.findViewById(R.id.btnCancel);
+
+        // event listener for save
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(MenuActivity.LOG_TAG, "Saving... and Sending an email...");
-                HistoryDbHelper dbHelper = new HistoryDbHelper(PlayGameActivity.this);
-                int difficulty=0;
-                if (mDifficulty.equalsIgnoreCase("easy")){
-                    difficulty=0;
-                }
-                else if (mDifficulty.equalsIgnoreCase("medium")){
-                    difficulty=1;
-                }
-                else if (mDifficulty.equalsIgnoreCase("hard")) {
-                    difficulty=2;
-                }
+            Log.i(MenuActivity.LOG_TAG, "Saving... and Sending an email...");
 
-                dbHelper.saveScoreToDB(mCurrentUser, score, difficulty);
+            // data for saving into db
+            int difficulty=0;
+            if (mDifficulty.equalsIgnoreCase("easy")){
+                difficulty=0;
+            }
+            else if (mDifficulty.equalsIgnoreCase("medium")){
+                difficulty=1;
+            }
+            else if (mDifficulty.equalsIgnoreCase("hard")) {
+                difficulty=2;
+            }
 
-                sendEmail();
-                dialog.dismiss();
+            // Save result into db
+            HistoryDbHelper dbHelper = new HistoryDbHelper(PlayGameActivity.this);
+            dbHelper.saveScoreToDB(mCurrentUser, score, difficulty);
+
+            sendEmail();
+
+            dialog.dismiss();
             }
         });
 
+        // event listener for cancel
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,13 +231,13 @@ public class PlayGameActivity extends MenuActivity {
         mSlideViewPage = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);
 
-        sliderAdapter = new SliderAdapter(this, questionList);
+        mSliderAdapter = new SliderAdapter(this, mQuestionList);
 
         if(mIsInstanceStateSaved)
-            sliderAdapter.userAnswer = userAnswer;
+            mSliderAdapter.userAnswer = mUserAnswer;
 
 
-        mSlideViewPage.setAdapter(sliderAdapter);
+        mSlideViewPage.setAdapter(mSliderAdapter);
 
         addDotsIndicator(0);
         mSlideViewPage.addOnPageChangeListener(viewListener);
@@ -245,6 +261,7 @@ public class PlayGameActivity extends MenuActivity {
         }
     }
 
+    // remove special characters in string from api
     private String replaceSpecialCharater(String s){
         // eliminate spacial characters
         s = s.replace("&nbsp;", " ");
@@ -268,28 +285,6 @@ public class PlayGameActivity extends MenuActivity {
         @Override
         public void onPageSelected(int position) {
             addDotsIndicator(position);
-
-            userAnswer = sliderAdapter.userAnswer;
-
-            if(userAnswer[position] > -1){
-                RadioGroup rgChoices = sliderAdapter.getPageItem(position).findViewById(R.id.rgChoices);
-                switch(userAnswer[position]) {
-                    case 0:
-                        rgChoices.check(R.id.rbChoice1);
-                        break;
-                    case 1:
-                        rgChoices.check(R.id.rbChoice2);
-                        break;
-                    case 2:
-                        rgChoices.check(R.id.rbChoice3);
-                        break;
-                    case 3:
-                        rgChoices.check(R.id.rbChoice4);
-                        break;
-                }
-            }
-
-
         }
 
         @Override
@@ -324,7 +319,7 @@ public class PlayGameActivity extends MenuActivity {
     }
 
     public void parseJSONString(){
-        questionList = new ArrayList<>();
+        mQuestionList = new ArrayList<>();
 
         try {
             mJsonString = replaceSpecialCharater(mJsonString);
@@ -353,7 +348,7 @@ public class PlayGameActivity extends MenuActivity {
                 }
 
                 // add question to the list
-                questionList.add(question);
+                mQuestionList.add(question);
             }
 
             createSlides();
@@ -369,7 +364,7 @@ public class PlayGameActivity extends MenuActivity {
         //i.setData(Uri.parse("mailto:"));
         i.putExtra(Intent.EXTRA_EMAIL  , new String[]{mCurrentUser});
         i.putExtra(Intent.EXTRA_SUBJECT, "Quiz Whiz");
-        i.putExtra(Intent.EXTRA_TEXT   , "Quiz Whiz : Game Score - [" + score + "]");
+        i.putExtra(Intent.EXTRA_TEXT   , "Quiz Whiz : Game Score - [" + score + "/" + NO_OF_QUESTIONS + "]");
         try {
             startActivity(Intent.createChooser(i, "Send mail..."));
 
@@ -384,7 +379,7 @@ public class PlayGameActivity extends MenuActivity {
         @Override
         protected List<History> doInBackground(String... strings) {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(5000);
 
                 Intent intentHistory = new Intent(PlayGameActivity.this, HistoryActivity.class);
                 startActivity(intentHistory);

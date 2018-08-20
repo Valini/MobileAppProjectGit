@@ -69,6 +69,8 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
 
         //print the id of the new row inserted
         Log.i(MenuActivity.LOG_TAG, "Row Number is " +newRowId);
+
+        db.close();
     }
 
 }

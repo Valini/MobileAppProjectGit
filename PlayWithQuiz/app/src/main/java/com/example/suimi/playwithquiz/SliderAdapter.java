@@ -23,20 +23,18 @@ public class SliderAdapter extends PagerAdapter {
     // Data source for page
     public ArrayList<Question> slide_data;
 
-    // Store each page to remember seclection of radio button(user answer)
-    public View[] pageViews;
     // store user's answer
     public int[] userAnswer;
 
     // container, data source
-    public SliderAdapter(Context context, ArrayList<Question> data){
+    public SliderAdapter(Context context, ArrayList<Question> data) {
         this.mContext = context;
+
+        // data source of slide - ArrayList of questions and choices from api
         slide_data = data;
 
-        pageViews = new View[PlayGameActivity.NO_OF_QUESTIONS];
-
         userAnswer = new int[PlayGameActivity.NO_OF_QUESTIONS];
-        for(int i=0; i < userAnswer.length; i++)
+        for (int i = 0; i < userAnswer.length; i++)
             userAnswer[i] = -1;
     }
 
@@ -76,7 +74,7 @@ public class SliderAdapter extends PagerAdapter {
 
         Button btnSubmit = view.findViewById(R.id.btnSubmit);
 
-        if(position == 4){
+        if (position == 4) {
             // Check user answered all question
             btnSubmit.setVisibility(View.VISIBLE);
 
@@ -84,18 +82,18 @@ public class SliderAdapter extends PagerAdapter {
 
                 @Override
                 public void onClick(View v) {
-                    ((PlayGameActivity)mContext).submitUserAnswers();
+                    ((PlayGameActivity) mContext).submitUserAnswers();
                 }
             });
-        }else{
+        } else {
             btnSubmit.setVisibility(View.INVISIBLE);
         }
 
         // When phone is rotated, app display user's selection
         // if there are user's choice then check the radio button user selected
-        if(userAnswer[position] > -1){
+        if (userAnswer[position] > -1) {
             RadioGroup rgChoices = view.findViewById(R.id.rgChoices);
-            switch(userAnswer[position]) {
+            switch (userAnswer[position]) {
                 case 0:
                     rgChoices.check(R.id.rbChoice1);
                     break;
@@ -147,19 +145,14 @@ public class SliderAdapter extends PagerAdapter {
 
         container.addView(view);
 
-        pageViews[position] = view;
-
 
         return view;
     }
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((RelativeLayout)object);
+        container.removeView((RelativeLayout) object);
     }
-
-    public View getPageItem(int position){
-        return pageViews[position];
-    }
-
 }
+
+
