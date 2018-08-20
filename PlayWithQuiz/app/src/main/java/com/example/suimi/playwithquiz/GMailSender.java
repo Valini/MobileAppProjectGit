@@ -31,15 +31,24 @@ public class GMailSender extends Authenticator {
         this.password = password;
 
         Properties props = new Properties();
+
         props.setProperty("mail.transport.protocol", "smtp");
         props.setProperty("mail.host", mailhost);
+
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.socketFactory.fallback", "false");
-        props.setProperty("mail.smtp.quitwait", "false");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        
+//        props.setProperty("mail.transport.protocol", "smtp");
+//        props.setProperty("mail.host", mailhost);
+//        props.put("mail.smtp.auth", "true");
+//        props.put("mail.smtp.port", "465");
+//        props.put("mail.smtp.socketFactory.port", "465");
+//        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+//        props.put("mail.smtp.socketFactory.fallback", "false");
+//        props.setProperty("mail.smtp.quitwait", "false");
 
         session = Session.getDefaultInstance(props, this);
     }
@@ -48,23 +57,21 @@ public class GMailSender extends Authenticator {
         return new PasswordAuthentication(user, password);
     }
 
-    public synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
-        try{
-            MimeMessage message = new MimeMessage(session);
-            DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
-            message.setSender(new InternetAddress(sender));
-            message.setSubject(subject);
-            message.setDataHandler(handler);
-            if (recipients.indexOf(',') > 0)
-                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
-            else
-                message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));
-            Transport.send(message);
-        }catch(Exception e){
+    public synchronized void sendMail(String subject, String body,
+                                      String sender, String recipients) throws Exception {
+        MimeMessage message = new MimeMessage(session);
+        DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
+        message.setSender(new InternetAddress(sender));
+        message.setSubject(subject);
+        message.setDataHandler(handler);
 
-        }
+        if (recipients.indexOf(',') > 0)
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
+        else
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));
+
+        Transport.send(message);
     }
-
     public class ByteArrayDataSource implements DataSource {
         private byte[] data;
         private String type;
