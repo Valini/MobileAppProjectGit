@@ -2,7 +2,10 @@ package com.example.suimi.playwithquiz;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.provider.BaseColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telecom.TelecomManager;
@@ -21,11 +24,17 @@ public class MenuActivity extends AppCompatActivity {
     public static String LOG_TAG = "PlayWithQuiz";
     public String mDifficulty = "easy";
     String mEmail = "";
+    HistoryDbHelper dbHelper;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        dbHelper = new HistoryDbHelper(this);
+        db =dbHelper.getReadableDatabase();
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -33,6 +42,12 @@ public class MenuActivity extends AppCompatActivity {
         inflater.inflate(R.menu.main, menu);
 
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        dbHelper.close();
+        super.onDestroy();
     }
 
     @Override
@@ -53,11 +68,15 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void ShowEmailEnteringDialog(){
+        HistoryDbHelper dbHelper = new HistoryDbHelper(this);
+        String email = getLastUser();
+
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_enter_email);
         dialog.setTitle("Enter Email");
 
-
+        if(email.length() > 0)
+            ((TextView)dialog.findViewById(R.id.etEmail)).setText(email);
         // set the custom dialog components - text, button
         final Button dialogButton = (Button)dialog.findViewById(R.id.btnStart);
         dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -115,4 +134,33 @@ public class MenuActivity extends AppCompatActivity {
 
         dialog.show();
     }
+
+    public String getLastUser(){
+        //SQLiteDatabase db = getWritableDatabase();
+
+        String[] projection = {
+                BaseColumns._ID,
+                QuizContract.QuizTable.COLUMN_EMAIL,
+        };
+        String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC";
+        Cursor cursor = db.query(
+                QuizContract.QuizTable.TABLE_NAME,   // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                null,               // The columns for the WHERE clause
+                null,           // The values for the WHERE clause
+                null,              // don't group the rows
+                null,              // don't filter by row groups
+                orderby,           // The sort order
+                "1"
+        );
+        cursor.moveToFirst();
+        //save the data from database to scoreList
+        String email = cursor.getString(1);
+
+        //db.close();
+
+        return email;
+    }
+
+
 }
