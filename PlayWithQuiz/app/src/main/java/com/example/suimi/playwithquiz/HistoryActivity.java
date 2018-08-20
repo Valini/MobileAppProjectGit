@@ -104,12 +104,9 @@ public class HistoryActivity extends MenuActivity {
                     QuizContract.QuizTable.COLUMN_DATE,
                     QuizContract.QuizTable.COLUMN_DIFFICULTY
             };
-<<<<<<< HEAD
 
             String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC";
-=======
-            String orderby = BaseColumns._ID + " DESC ";
->>>>>>> 829da8ca216ae8c9d8adca4e49b6c5afad302e7d
+
             Cursor cursor = db.query(
                     QuizContract.QuizTable.TABLE_NAME,   // The table to query
                     projection,                 // The array of columns to return (pass null to get all)
@@ -160,13 +157,15 @@ public class HistoryActivity extends MenuActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            String senderEmail = "suimiedevelop@gmail.com";
-            String password = "Develop!@#";
+            String senderEmail = "valinipatten@gmail.com";
+            String password = ".......";
             String subject = "Quiz Whiz";
+            String mMailString1="Test";
+            String mCurrentUser1="valinipatten@yahoo.com";
 
             try{
                 GMailSender sender = new GMailSender(senderEmail, password);
-                sender.sendMail(subject, mMailString, senderEmail, mCurrentUser);
+                sender.sendMail(subject, mMailString1, senderEmail, mCurrentUser1);
             } catch (Exception e) {
                 e.printStackTrace();
             }
