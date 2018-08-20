@@ -65,6 +65,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 EditText etEmail = dialog.findViewById(R.id.etEmail);
                 mEmail = etEmail.getText().toString();
+                mEmail = mEmail.toLowerCase();
                 String pattern = "^[-a-z0-9~!$%^&*_=+}{\\'?]+(\\.[-a-z0-9~!$%^&*_=+}{\\'?]+)*@([a-z0-9_][-a-z0-9_]*(\\.[-a-z0-9_]+)*\\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,5})?$";
                 if(!mEmail.matches(pattern)){
                     TextView tvEmail = dialog.findViewById(R.id.tvEmail);
