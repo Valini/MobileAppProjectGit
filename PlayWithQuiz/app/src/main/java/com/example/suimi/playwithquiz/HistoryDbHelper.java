@@ -37,65 +37,17 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
 
 
 
-        public void onCreate(SQLiteDatabase db){
+    public void onCreate(SQLiteDatabase db){
 
-            this.db = db;
-            db.execSQL(SQL_CREATE_ENTRIES);
+        this.db = db;
+        db.execSQL(SQL_CREATE_ENTRIES);
 
-        }
+    }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
-    }
-
-
-    public void saveScoreToDB(String email, int score, int difficulty){
-        // Gets the data repository in write mode
-        SQLiteDatabase db = getWritableDatabase();
-
-        SimpleDateFormat currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        currentTime.setTimeZone(TimeZone.getTimeZone("GMT-04:00"));
-
-        // Create a new map of values, where column names are the keys
-        ContentValues values = new ContentValues();
-        values.put(QuizContract.QuizTable.COLUMN_EMAIL, email);
-        values.put(QuizContract.QuizTable.COLUMN_SCORE, score);
-        values.put(QuizContract.QuizTable.COLUMN_DATE, currentTime.format(new Date()));
-        values.put(QuizContract.QuizTable.COLUMN_DIFFICULTY, difficulty);
-        //Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert(QuizContract.QuizTable.TABLE_NAME, null, values);
-
-
-        //print the id of the new row inserted
-        Log.i(MenuActivity.LOG_TAG, "Row Number is " +newRowId);
-
-        db.close();
-    }
-
-    public String getLastUser(){
-        SQLiteDatabase db = getWritableDatabase();
-
-        String[] projection = {
-                "max(" + QuizContract.QuizTable.COLUMN_EMAIL + ")"
-        };
-        Cursor cursor = db.query(
-                QuizContract.QuizTable.TABLE_NAME,   // The table to query
-                projection,                 // The array of columns to return (pass null to get all)
-                null,               // The columns for the WHERE clause
-                null,           // The values for the WHERE clause
-                null,              // don't group the rows
-                null,              // don't filter by row groups
-                null             // The sort order
-        );
-        cursor.moveToFirst();
-        //save the data from database to scoreList
-        String email = cursor.getString(0);
-
-        db.close();
-
-        return email;
     }
 }

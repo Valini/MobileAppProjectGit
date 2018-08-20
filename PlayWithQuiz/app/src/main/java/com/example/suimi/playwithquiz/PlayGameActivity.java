@@ -1,7 +1,10 @@
 package com.example.suimi.playwithquiz;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
@@ -22,11 +25,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class PlayGameActivity extends MenuActivity {
     static int NO_OF_QUESTIONS = 5;
@@ -56,7 +61,6 @@ public class PlayGameActivity extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paly_game);
-
 
         if(savedInstanceState != null)
             mIsInstanceStateSaved = true;
@@ -90,10 +94,6 @@ public class PlayGameActivity extends MenuActivity {
         Log.i(MenuActivity.LOG_TAG, "On Resume");
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -199,8 +199,10 @@ public class PlayGameActivity extends MenuActivity {
             }
 
             // Save result into db
-            HistoryDbHelper dbHelper = new HistoryDbHelper(PlayGameActivity.this);
-            dbHelper.saveScoreToDB(mCurrentUser, score, difficulty);
+           // HistoryDbHelper dbHelper = new HistoryDbHelper(PlayGameActivity.this);
+            //dbHelper.saveScoreToDB(mCurrentUser, score, difficulty);
+
+            saveScoreToDB(mCurrentUser, score, difficulty);
 
             moveToHistoryActivityAndSendEmail();
 
@@ -385,6 +387,28 @@ public class PlayGameActivity extends MenuActivity {
         startActivity(intentHistory);
     }
 
+    public void saveScoreToDB(String email, int score, int difficulty){
+        // Gets the data repository in write mode
+        //SQLiteDatabase db = getWritableDatabase();
+
+        SimpleDateFormat currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        currentTime.setTimeZone(TimeZone.getTimeZone("GMT-04:00"));
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(QuizContract.QuizTable.COLUMN_EMAIL, email);
+        values.put(QuizContract.QuizTable.COLUMN_SCORE, score);
+        values.put(QuizContract.QuizTable.COLUMN_DATE, currentTime.format(new Date()));
+        values.put(QuizContract.QuizTable.COLUMN_DIFFICULTY, difficulty);
+        //Insert the new row, returning the primary key value of the new row
+        long newRowId = db.insert(QuizContract.QuizTable.TABLE_NAME, null, values);
+
+
+        //print the id of the new row inserted
+        Log.i(MenuActivity.LOG_TAG, "Row Number is " +newRowId);
+
+        //db.close();
+    }
 
 }
 

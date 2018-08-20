@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class HistoryActivity extends MenuActivity {
-    HistoryDbHelper dbHelper;
-    SQLiteDatabase db;
     ArrayList<History> scoreList = new ArrayList<>();
     public boolean mIsSendEmail = false;
     public String mCurrentUser = "";
@@ -54,15 +52,14 @@ public class HistoryActivity extends MenuActivity {
         }
 
 
-        dbHelper = new HistoryDbHelper(this);
-        db =dbHelper.getReadableDatabase();
-
          //fetch Score History Data  Async
         new FetchScoreData().execute();
 
     }
 
+
     public void sendEmail(){
+
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
         //i.setData(Uri.parse("mailto:"));
@@ -119,7 +116,7 @@ public class HistoryActivity extends MenuActivity {
                     QuizContract.QuizTable.COLUMN_DATE,
                     QuizContract.QuizTable.COLUMN_DIFFICULTY
             };
-            String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC ";
+            String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC";
             Cursor cursor = db.query(
                     QuizContract.QuizTable.TABLE_NAME,   // The table to query
                     projection,                 // The array of columns to return (pass null to get all)
@@ -127,11 +124,12 @@ public class HistoryActivity extends MenuActivity {
                     null,           // The values for the WHERE clause
                     null,              // don't group the rows
                     null,              // don't filter by row groups
-                    orderby             // The sort order
+                    orderby           // The sort order
             );
             cursor.moveToFirst();
+            int cursorSize = cursor.getCount();
             //save the data from database to scoreList
-            while (cursor.moveToNext()) {
+            do {
                 Integer id = cursor.getInt(0);
                 String email = cursor.getString(1);
                 Integer score = cursor.getInt(2);
@@ -146,7 +144,7 @@ public class HistoryActivity extends MenuActivity {
                 scoreList.add(scoreHistory);
 
 
-            }
+            }while (cursor.moveToNext());
 
             return scoreList;
         }

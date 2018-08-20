@@ -6,7 +6,7 @@
     <TextView
         android:id="@+id/tvQuestion"
         android:layout_width="wrap_content"
-        android:layout_height="225dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="11dp"
@@ -64,8 +64,10 @@
         android:layout_below="@+id/rgChoices"
         android:layout_marginTop="-68dp"
         android:layout_weight="1"
+        android:background="@color/blue_violet"
         android:onClick="submitUserAnswers"
         android:text="Submit"
+        android:textColor="@android:color/background_light"
         android:visibility="visible" />
 
 
