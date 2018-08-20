@@ -1,6 +1,7 @@
 package com.example.suimi.playwithquiz;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 
@@ -32,6 +34,9 @@ public class HistoryActivity extends MenuActivity {
     HistoryDbHelper dbHelper;
     SQLiteDatabase db;
     ArrayList<History> scoreList = new ArrayList<>();
+    public boolean mIsSendEmail = false;
+    public String mCurrentUser = "";
+    public String mMailString = "";
 
 
     @Override
@@ -39,11 +44,36 @@ public class HistoryActivity extends MenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         Stetho.initializeWithDefaults(this);
+
+        Intent intentReceived = getIntent();
+        if(intentReceived.hasExtra(Intent.EXTRA_TEXT)){
+            mCurrentUser = intentReceived.getStringExtra(Intent.EXTRA_TEXT);
+        }
+        if(intentReceived.hasExtra(Intent.EXTRA_SUBJECT)){
+            mMailString = intentReceived.getStringExtra(Intent.EXTRA_SUBJECT);
+        }
+
+
         dbHelper = new HistoryDbHelper(this);
         db =dbHelper.getReadableDatabase();
+
          //fetch Score History Data  Async
         new FetchScoreData().execute();
 
+    }
+
+    public void sendEmail(){
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        //i.setData(Uri.parse("mailto:"));
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{mCurrentUser});
+        i.putExtra(Intent.EXTRA_SUBJECT, "Quiz Whiz");
+        i.putExtra(Intent.EXTRA_TEXT   , mMailString);
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(HistoryActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void initRecylerView(){
@@ -53,7 +83,10 @@ public class HistoryActivity extends MenuActivity {
         myRcView.setAdapter(scoreAdapter);
         myRcView.setLayoutManager(new LinearLayoutManager(this));
 
-
+        if (mCurrentUser.length() > 0 && mMailString.length() >0 ){
+            sendEmail();
+            mMailString = "";
+        }
     }
 
     public void onBackPressed (){
@@ -86,6 +119,7 @@ public class HistoryActivity extends MenuActivity {
                     QuizContract.QuizTable.COLUMN_DATE,
                     QuizContract.QuizTable.COLUMN_DIFFICULTY
             };
+            String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC ";
             Cursor cursor = db.query(
                     QuizContract.QuizTable.TABLE_NAME,   // The table to query
                     projection,                 // The array of columns to return (pass null to get all)
@@ -93,7 +127,7 @@ public class HistoryActivity extends MenuActivity {
                     null,           // The values for the WHERE clause
                     null,              // don't group the rows
                     null,              // don't filter by row groups
-                    null             // The sort order
+                    orderby             // The sort order
             );
             cursor.moveToFirst();
             //save the data from database to scoreList

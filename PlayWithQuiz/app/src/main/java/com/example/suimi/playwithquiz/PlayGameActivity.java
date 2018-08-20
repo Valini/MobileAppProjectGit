@@ -98,7 +98,7 @@ public class PlayGameActivity extends MenuActivity {
         // save email address, data from api and user's selection
         mUserAnswer = mSliderAdapter.userAnswer;
 
-        outState.putString("EMAIL", mEmail);
+        outState.putString("EMAIL", mCurrentUser);
         outState.putString("JSON_QUIZ", mJsonString);
         outState.putIntArray("USER_ANSWERS", mUserAnswer);
 
@@ -110,7 +110,7 @@ public class PlayGameActivity extends MenuActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         // restore the data before stopped
-        mEmail = savedInstanceState.getString("EMAIL");
+        mCurrentUser = savedInstanceState.getString("EMAIL");
         mJsonString = savedInstanceState.getString("JSON_QUIZ");
         mUserAnswer = savedInstanceState.getIntArray("USER_ANSWERS");
 
@@ -198,7 +198,8 @@ public class PlayGameActivity extends MenuActivity {
             HistoryDbHelper dbHelper = new HistoryDbHelper(PlayGameActivity.this);
             dbHelper.saveScoreToDB(mCurrentUser, score, difficulty);
 
-            sendEmail();
+//            sendEmail();
+            moveToHistoryActivityAndSendEmail();
 
             dialog.dismiss();
             }
@@ -356,6 +357,16 @@ public class PlayGameActivity extends MenuActivity {
             e.printStackTrace();
         }
 
+    }
+
+    public void moveToHistoryActivityAndSendEmail(){
+        String resultString = "Quiz Whiz : Game Score - [" + score + "/" + NO_OF_QUESTIONS + "]";
+
+        Intent intentHistory = new Intent(PlayGameActivity.this, HistoryActivity.class);
+        intentHistory.putExtra(Intent.EXTRA_TEXT, mCurrentUser);
+        intentHistory.putExtra(Intent.EXTRA_SUBJECT, resultString);
+
+        startActivity(intentHistory);
     }
 
     public void sendEmail(){
