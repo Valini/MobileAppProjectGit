@@ -46,10 +46,12 @@ public class HistoryActivity extends MenuActivity {
         Intent intentReceived = getIntent();
         if(intentReceived.hasExtra(Intent.EXTRA_TEXT)){
             mCurrentUser = intentReceived.getStringExtra(Intent.EXTRA_TEXT);
+            intentReceived.putExtra(Intent.EXTRA_TEXT, "");
+
         }
         if(intentReceived.hasExtra(Intent.EXTRA_SUBJECT)){
             mMailString = intentReceived.getStringExtra(Intent.EXTRA_SUBJECT);
-            //savedInstanceState.clear();
+            intentReceived.putExtra(Intent.EXTRA_SUBJECT, "");
         }
 
 
@@ -70,7 +72,6 @@ public class HistoryActivity extends MenuActivity {
         if (mCurrentUser.length() > 0 && mMailString.length() >0 ){
             //sendEmail();
             new SendEmail().execute();
-            mMailString = "";
         }
     }
 
@@ -104,12 +105,7 @@ public class HistoryActivity extends MenuActivity {
                     QuizContract.QuizTable.COLUMN_DATE,
                     QuizContract.QuizTable.COLUMN_DIFFICULTY
             };
-<<<<<<< HEAD
-
-            String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC";
-=======
             String orderby = BaseColumns._ID + " DESC ";
->>>>>>> 829da8ca216ae8c9d8adca4e49b6c5afad302e7d
             Cursor cursor = db.query(
                     QuizContract.QuizTable.TABLE_NAME,   // The table to query
                     projection,                 // The array of columns to return (pass null to get all)
@@ -160,7 +156,7 @@ public class HistoryActivity extends MenuActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            String senderEmail = "suimiedevelop@gmail.com";
+            String senderEmail = "suimiedevlop@gmail.com";
             String password = "Develop!@#";
             String subject = "Quiz Whiz";
 
@@ -178,6 +174,7 @@ public class HistoryActivity extends MenuActivity {
         protected void onPostExecute(Void a) {
             Toast.makeText(HistoryActivity.this, "Email has sent!",
                     Toast.LENGTH_SHORT).show();
+            mMailString = "";
         }
     }
 }
