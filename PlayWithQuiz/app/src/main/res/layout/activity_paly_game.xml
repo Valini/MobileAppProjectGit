@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="Loading...."
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/holo_blue_dark"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:visibility="invisible" />
 
