@@ -119,7 +119,7 @@ public class HistoryActivity extends MenuActivity {
                     QuizContract.QuizTable.COLUMN_DATE,
                     QuizContract.QuizTable.COLUMN_DIFFICULTY
             };
-            String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC ";
+            String orderby = BaseColumns._ID + " DESC ";
             Cursor cursor = db.query(
                     QuizContract.QuizTable.TABLE_NAME,   // The table to query
                     projection,                 // The array of columns to return (pass null to get all)
@@ -127,7 +127,7 @@ public class HistoryActivity extends MenuActivity {
                     null,           // The values for the WHERE clause
                     null,              // don't group the rows
                     null,              // don't filter by row groups
-                    orderby             // The sort order
+                    orderby           // The sort order
             );
             cursor.moveToFirst();
             //save the data from database to scoreList

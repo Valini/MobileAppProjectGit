@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".HistoryActivity">
 
+
     <TextView
         android:id="@+id/tv_results"
         android:layout_width="match_parent"
@@ -15,6 +16,10 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbarAlwaysDrawVerticalTrack="true">
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
@@ -22,7 +27,8 @@
             android:id="@+id/rc_view"></android.support.v7.widget.RecyclerView>
 
 
-
+    </ScrollView>
     </FrameLayout>
+
 
 </LinearLayout>
