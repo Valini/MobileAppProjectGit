@@ -46,10 +46,12 @@ public class HistoryActivity extends MenuActivity {
         Intent intentReceived = getIntent();
         if(intentReceived.hasExtra(Intent.EXTRA_TEXT)){
             mCurrentUser = intentReceived.getStringExtra(Intent.EXTRA_TEXT);
+            intentReceived.putExtra(Intent.EXTRA_TEXT, "");
+
         }
         if(intentReceived.hasExtra(Intent.EXTRA_SUBJECT)){
             mMailString = intentReceived.getStringExtra(Intent.EXTRA_SUBJECT);
-            //savedInstanceState.clear();
+            intentReceived.putExtra(Intent.EXTRA_SUBJECT, "");
         }
 
 
@@ -70,7 +72,6 @@ public class HistoryActivity extends MenuActivity {
         if (mCurrentUser.length() > 0 && mMailString.length() >0 ){
             //sendEmail();
             new SendEmail().execute();
-            mMailString = "";
         }
     }
 
@@ -104,9 +105,13 @@ public class HistoryActivity extends MenuActivity {
                     QuizContract.QuizTable.COLUMN_DATE,
                     QuizContract.QuizTable.COLUMN_DIFFICULTY
             };
+<<<<<<< HEAD
 
             String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC";
 
+=======
+            String orderby = BaseColumns._ID + " DESC ";
+>>>>>>> bd2fbae8ced0fc0bb5b97fd73514b77ca220b008
             Cursor cursor = db.query(
                     QuizContract.QuizTable.TABLE_NAME,   // The table to query
                     projection,                 // The array of columns to return (pass null to get all)
@@ -157,8 +162,13 @@ public class HistoryActivity extends MenuActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
+<<<<<<< HEAD
             String senderEmail = "valinipatten@gmail.com";
             String password = ".......";
+=======
+            String senderEmail = "suimiedevlop@gmail.com";
+            String password = "Develop!@#";
+>>>>>>> bd2fbae8ced0fc0bb5b97fd73514b77ca220b008
             String subject = "Quiz Whiz";
             String mMailString1="Test";
             String mCurrentUser1="valinipatten@yahoo.com";
@@ -177,6 +187,7 @@ public class HistoryActivity extends MenuActivity {
         protected void onPostExecute(Void a) {
             Toast.makeText(HistoryActivity.this, "Email has sent!",
                     Toast.LENGTH_SHORT).show();
+            mMailString = "";
         }
     }
 }
