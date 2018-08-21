@@ -48,11 +48,19 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
 
     }
 
+<<<<<<< HEAD
     //GETTING THE NUMBER OF ITEMS FROM THE LIST
     @Override
     public int getItemCount() {
         return scoreList.size();
     }
+=======
+            //GETTING THE NUMBER OF ITEMS FROM THE LIST
+
+            public int getItemCount() {
+                return scoreList.size();
+            }
+>>>>>>> 56697a62186ee019ecf46eb1d261e1ac1fe61839
 
     class OneItemViewHolder extends RecyclerView.ViewHolder {
         TextView tvOne;
