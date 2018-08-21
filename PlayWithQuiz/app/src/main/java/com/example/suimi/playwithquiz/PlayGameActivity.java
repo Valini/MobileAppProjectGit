@@ -35,7 +35,6 @@ import java.util.TimeZone;
 
 public class PlayGameActivity extends MenuActivity {
     static int NO_OF_QUESTIONS = 5;
-    private boolean isLoading = false;
 
     // Store jsonstring from api call -> this is for processing to restore data when resume the activity
     String mJsonString;
@@ -299,6 +298,7 @@ public class PlayGameActivity extends MenuActivity {
         }
     };
 
+    // Get questions from api call of Web Service
     public class FetchDataFromApi extends AsyncTask<URL, Void, String> {
         TextView tvLoading = findViewById(R.id.tvLoading);
 
@@ -306,7 +306,6 @@ public class PlayGameActivity extends MenuActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             tvLoading.setVisibility(View.VISIBLE);
-            isLoading = true;
         }
 
         @Override
@@ -318,8 +317,6 @@ public class PlayGameActivity extends MenuActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            isLoading = false;
 
             return response;
         }
@@ -382,7 +379,7 @@ public class PlayGameActivity extends MenuActivity {
 
         int noQ = 0;
         for(Question q : mQuestionList){
-            resultString += ("\n\n(" + (noQ+1) + ")" + q.getQuestion() + "\n - Your choice : ");
+            resultString += ("\n\n(" + (noQ+1) + ")" + q.getQuestion() + "\n - Your answer : ");
             if (mUserAnswer[noQ] >= 0)
                 resultString += q.getNthChoice(mUserAnswer[noQ]);
             resultString += "\n - Correct Answer : " + q.getAnswer() + "\n\n";
