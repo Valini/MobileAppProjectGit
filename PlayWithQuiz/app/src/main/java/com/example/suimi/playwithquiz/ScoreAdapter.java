@@ -48,32 +48,29 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
 
     }
 
-<<<<<<< HEAD
-            //GETTING THE NUMBER OF ITEMS FROM THE LIST
-=======
->>>>>>> c3c201375bf37a06f58e42b60b655f0ce8bff770
-            @Override
-            public int getItemCount() {
-                return scoreList.size();
-            }
-
-            class OneItemViewHolder extends RecyclerView.ViewHolder {
-                TextView tvOne;
-                TextView tvOneItemEmail;
-                TextView tvSecondItemScore;
-                TextView tvThirdItemDate;
-                TextView tvFourthItemDifficulty;
-
-                FrameLayout singleItemParentLayout;
-                //display the data in the textviews
-                public OneItemViewHolder(@NonNull View itemView) {
-                    super(itemView);
-                    tvOneItemEmail = itemView.findViewById(R.id.tv_in_itemEmail);
-                    tvSecondItemScore = itemView.findViewById(R.id.tv_in_item2Score);
-                    tvThirdItemDate = itemView.findViewById(R.id.tv_in_item3Date);
-                    tvFourthItemDifficulty = itemView.findViewById(R.id.tv_in_item4Difficulty);
-                    singleItemParentLayout = itemView.findViewById(R.id.single_item_parent_layout);
-                }
-            }
+    //GETTING THE NUMBER OF ITEMS FROM THE LIST
+    @Override
+    public int getItemCount() {
+        return scoreList.size();
     }
+
+    class OneItemViewHolder extends RecyclerView.ViewHolder {
+        TextView tvOne;
+        TextView tvOneItemEmail;
+        TextView tvSecondItemScore;
+        TextView tvThirdItemDate;
+        TextView tvFourthItemDifficulty;
+
+        FrameLayout singleItemParentLayout;
+        //display the data in the textviews
+        public OneItemViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvOneItemEmail = itemView.findViewById(R.id.tv_in_itemEmail);
+            tvSecondItemScore = itemView.findViewById(R.id.tv_in_item2Score);
+            tvThirdItemDate = itemView.findViewById(R.id.tv_in_item3Date);
+            tvFourthItemDifficulty = itemView.findViewById(R.id.tv_in_item4Difficulty);
+            singleItemParentLayout = itemView.findViewById(R.id.single_item_parent_layout);
+        }
+    }
+}
 

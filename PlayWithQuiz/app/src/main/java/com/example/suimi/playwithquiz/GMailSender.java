@@ -27,10 +27,6 @@ public class GMailSender extends Authenticator {
         this.password = password;
 
         Properties props = new Properties();
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
         props.setProperty("mail.transport.protocol", "smtp");
         props.setProperty("mail.host", mailhost);
         props.put("mail.smtp.auth", "true");
