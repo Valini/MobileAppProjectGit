@@ -48,11 +48,8 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
 
     }
 
-<<<<<<< HEAD
             //GETTING THE NUMBER OF ITEMS FROM THE LIST
-=======
->>>>>>> c3c201375bf37a06f58e42b60b655f0ce8bff770
-            @Override
+
             public int getItemCount() {
                 return scoreList.size();
             }
