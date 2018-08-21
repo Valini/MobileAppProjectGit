@@ -76,7 +76,7 @@ public class SliderAdapter extends PagerAdapter {
         rbChoice4.setText(q.getNthChoice(3));
 
         Button btnSubmit = view.findViewById(R.id.btnSubmit);
-
+        //MAKE SUBMIT BUTTON VISIBLE ON LAST QUESTION
         if (position == 4) {
             // Check user answered all question
             btnSubmit.setVisibility(View.VISIBLE);

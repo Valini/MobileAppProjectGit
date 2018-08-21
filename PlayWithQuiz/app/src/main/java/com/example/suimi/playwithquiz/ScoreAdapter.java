@@ -18,6 +18,8 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
 
         scoreList = list;
     }
+
+    //INFLATE THE VIEWHOLDER
     @NonNull
     @Override
     public ScoreAdapter.OneItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -26,7 +28,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
 
         return new OneItemViewHolder(inflatedView);
     }
-
+    //GETTING THE VALUES FROM DB AND BINDING TO EACH VIEW IN THE VIEWHOLDER
     @Override
     public void onBindViewHolder(@NonNull OneItemViewHolder oneItemViewHolder, final int i) {
 
@@ -46,6 +48,10 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
 
     }
 
+<<<<<<< HEAD
+            //GETTING THE NUMBER OF ITEMS FROM THE LIST
+=======
+>>>>>>> c3c201375bf37a06f58e42b60b655f0ce8bff770
             @Override
             public int getItemCount() {
                 return scoreList.size();
@@ -59,7 +65,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
                 TextView tvFourthItemDifficulty;
 
                 FrameLayout singleItemParentLayout;
-
+                //display the data in the textviews
                 public OneItemViewHolder(@NonNull View itemView) {
                     super(itemView);
                     tvOneItemEmail = itemView.findViewById(R.id.tv_in_itemEmail);

@@ -40,7 +40,7 @@ public class MenuActivity extends AppCompatActivity {
         db =dbHelper.getReadableDatabase();
 
     }
-
+    //INFLATE THE MENU
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
@@ -48,12 +48,15 @@ public class MenuActivity extends AppCompatActivity {
         return true;
     }
 
+    //CLOSE THE DB CONNECTION ON DESTROY
     @Override
     protected void onDestroy() {
         dbHelper.close();
         super.onDestroy();
     }
 
+
+    //OPTION MENU SELECTION
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int selectedItemId = item.getItemId();
@@ -71,6 +74,8 @@ public class MenuActivity extends AppCompatActivity {
         return true;
     }
 
+
+    //SHOW DIALOG FOR USER TO ENTER EMAIL ADDRESS
     public void ShowEmailEnteringDialog(){
         HistoryDbHelper dbHelper = new HistoryDbHelper(this);
         String email = getLastUser();
@@ -83,6 +88,7 @@ public class MenuActivity extends AppCompatActivity {
             ((TextView)dialog.findViewById(R.id.etEmail)).setText(email);
         // set the custom dialog components - text, button
         final Button dialogButton = (Button)dialog.findViewById(R.id.btnStart);
+        //when start button is clicked, get user email info and validate
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +102,7 @@ public class MenuActivity extends AppCompatActivity {
                     tvEmail.setTextColor(Color.rgb(200,0,0));
                     etEmail.setText("");
                 }else {
-                    //getQuestions();
+                    //if email is valid and start play game activity;
                     Intent intentPlayGame = new Intent(MenuActivity.this, PlayGameActivity.class);
                     intentPlayGame.putExtra(Intent.EXTRA_TEXT, mEmail);
                     intentPlayGame.putExtra(Intent.EXTRA_SUBJECT, mDifficulty);
@@ -138,7 +144,7 @@ public class MenuActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
+    //get the last user email and display it for next game
     public String getLastUser(){
         //SQLiteDatabase db = getWritableDatabase();
 

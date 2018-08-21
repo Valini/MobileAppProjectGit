@@ -31,9 +31,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class HistoryActivity extends MenuActivity {
+
     ArrayList<History> scoreList = new ArrayList<>();
     public boolean mIsSendEmail = false;
     public String mMailString = "";
+    private boolean isLoading = false;
 
 
     @Override
@@ -53,23 +55,26 @@ public class HistoryActivity extends MenuActivity {
             intentReceived.putExtra(Intent.EXTRA_SUBJECT, "");
         }
 
-
-
          //fetch Score History Data  Async
         new FetchScoreData().execute();
 
     }
 
-
+    // METHOD TO DISPLAY SCORE LIST IN RECYCLERVIEW
     public void initRecylerView(){
 
         RecyclerView myRcView = findViewById(R.id.rc_view);
         ScoreAdapter scoreAdapter = new ScoreAdapter(scoreList);
         myRcView.setAdapter(scoreAdapter);
         myRcView.setLayoutManager(new LinearLayoutManager(this));
+<<<<<<< HEAD
 
         if (mEmail.length() > 0 && mMailString.length() >0 ){
             //sendEmail();
+=======
+        //send email id there is a player and score
+        if (mCurrentUser.length() > 0 && mMailString.length() >0 ){
+>>>>>>> origin/master
             new SendEmail().execute();
         }
     }
@@ -79,24 +84,23 @@ public class HistoryActivity extends MenuActivity {
     }
 
 
-
+    //ASYNC METHOD TO GET THE SCORE HISTORY LIST FROM DB
     public class FetchScoreData extends AsyncTask<String, Void, ArrayList<History>> {
-
+        TextView tvLoading = findViewById(R.id.tvLoading);
         @Override
         protected void onPreExecute() {
-            /*
 
-            TextView tvResults = findViewById(R.id.tv_results);
-            tvResults.setText("Data Starting to Load...");;
+            tvLoading.setVisibility(View.VISIBLE);
+            isLoading = true;
 
-*/
         }
 
-
+        //
         @Override
         protected ArrayList<History> doInBackground(String... values) {
 
 
+            // projection for the columns we need from the database
             String[] projection = {
                     BaseColumns._ID,
                     QuizContract.QuizTable.COLUMN_EMAIL,
@@ -104,7 +108,11 @@ public class HistoryActivity extends MenuActivity {
                     QuizContract.QuizTable.COLUMN_DATE,
                     QuizContract.QuizTable.COLUMN_DIFFICULTY
             };
+<<<<<<< HEAD
 
+=======
+            //order by date descending
+>>>>>>> origin/master
             String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC";
 
             Cursor cursor = db.query(
@@ -135,7 +143,7 @@ public class HistoryActivity extends MenuActivity {
 
 
             }while (cursor.moveToNext());
-
+            isLoading = false;
             return scoreList;
         }
 
@@ -147,16 +155,18 @@ public class HistoryActivity extends MenuActivity {
 
         @Override
         protected void onPostExecute(ArrayList<History> scoreList) {
-            //display the data in RecyclerView
+            //display the scoreList in RecyclerView
             initRecylerView();
+            tvLoading.setVisibility(View.INVISIBLE);
 
         }
     }
-
+    //METHOD TO SEND SCORE TO PLAYER
     public class SendEmail extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
+<<<<<<< HEAD
             String senderEmail = "suimiedevlop@gmail.com";
             String password = "Develop!@#";
             String subject = "Quiz Whiz";
@@ -164,13 +174,25 @@ public class HistoryActivity extends MenuActivity {
             try{
                 GMailSender sender = new GMailSender(senderEmail, password);
                 sender.sendMail(subject, mMailString, senderEmail, mEmail);
+=======
+
+            String senderEmail = "valinipatten@gmail.com";
+            String password = "";
+            String subject = "Quiz Whiz";
+
+
+
+            try{
+                GMailSender sender = new GMailSender(senderEmail, password);
+                sender.sendMail(subject, mMailString, senderEmail, mCurrentUser);
+>>>>>>> origin/master
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             return null;
         }
-
+        //TOAST MESSAGE TO CONFIRM EMAIL SENT
         @Override
         protected void onPostExecute(Void a) {
             Toast.makeText(HistoryActivity.this, "Email has sent!",
