@@ -31,7 +31,15 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0-rc01'
+<<<<<<< HEAD
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation files('libs/mail.jar')
     implementation files('libs/activation.jar')
     implementation files('libs/additionnal.jar')
+
+=======
+    implementation files('libs/mail.jar')
+    implementation files('libs/activation.jar')
+    implementation files('libs/additionnal.jar')
+>>>>>>> 80848dbe09ccc0320ad2165b6d8125e8c5c694be
 }
