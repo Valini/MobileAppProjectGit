@@ -62,7 +62,9 @@ public class MenuActivity extends AppCompatActivity {
         int selectedItemId = item.getItemId();
 
         if(selectedItemId == R.id.miPlayGame) {
-            ShowEmailEnteringDialog();
+//            ShowEmailEnteringDialog();
+            Intent mainActivity = new Intent(this, MainActivity.class);
+            startActivity(mainActivity);
 
         }else if(selectedItemId == R.id.miShowHistory){
             Intent intentHistory = new Intent(this, HistoryActivity.class);
