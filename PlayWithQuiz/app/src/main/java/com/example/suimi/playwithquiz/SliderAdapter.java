@@ -33,6 +33,7 @@ public class SliderAdapter extends PagerAdapter {
         // data source of slide - ArrayList of questions and choices from api
         slide_data = data;
 
+        // Initialize the userAnswer with -1 => -1 means user didn't enter answer when app calculate score
         userAnswer = new int[PlayGameActivity.NO_OF_QUESTIONS];
         for (int i = 0; i < userAnswer.length; i++)
             userAnswer[i] = -1;
@@ -44,12 +45,14 @@ public class SliderAdapter extends PagerAdapter {
         return slide_data.size();
     }
 
+    // check if the view is the object which is created in the method <public Object instantiateItem()>
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
         return view == (RelativeLayout) o;
     }
 
 
+    // Create a page of viewpager(slider)
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
@@ -149,6 +152,7 @@ public class SliderAdapter extends PagerAdapter {
         return view;
     }
 
+    // It is called when a page is destoryed
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((RelativeLayout) object);

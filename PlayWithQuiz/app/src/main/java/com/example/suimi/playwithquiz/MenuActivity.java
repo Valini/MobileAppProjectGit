@@ -23,7 +23,11 @@ public class MenuActivity extends AppCompatActivity {
 
     public static String LOG_TAG = "PlayWithQuiz";
     public String mDifficulty = "easy";
+
+    // Store user's email address
     String mEmail = "";
+
+    // For db access
     HistoryDbHelper dbHelper;
     SQLiteDatabase db;
 

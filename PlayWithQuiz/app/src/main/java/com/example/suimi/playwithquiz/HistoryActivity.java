@@ -33,7 +33,6 @@ import java.util.Locale;
 public class HistoryActivity extends MenuActivity {
     ArrayList<History> scoreList = new ArrayList<>();
     public boolean mIsSendEmail = false;
-    public String mCurrentUser = "";
     public String mMailString = "";
 
 
@@ -45,7 +44,7 @@ public class HistoryActivity extends MenuActivity {
 
         Intent intentReceived = getIntent();
         if(intentReceived.hasExtra(Intent.EXTRA_TEXT)){
-            mCurrentUser = intentReceived.getStringExtra(Intent.EXTRA_TEXT);
+            mEmail = intentReceived.getStringExtra(Intent.EXTRA_TEXT);
             intentReceived.putExtra(Intent.EXTRA_TEXT, "");
 
         }
@@ -69,7 +68,7 @@ public class HistoryActivity extends MenuActivity {
         myRcView.setAdapter(scoreAdapter);
         myRcView.setLayoutManager(new LinearLayoutManager(this));
 
-        if (mCurrentUser.length() > 0 && mMailString.length() >0 ){
+        if (mEmail.length() > 0 && mMailString.length() >0 ){
             //sendEmail();
             new SendEmail().execute();
         }
@@ -105,13 +104,9 @@ public class HistoryActivity extends MenuActivity {
                     QuizContract.QuizTable.COLUMN_DATE,
                     QuizContract.QuizTable.COLUMN_DIFFICULTY
             };
-<<<<<<< HEAD
 
             String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC";
 
-=======
-            String orderby = BaseColumns._ID + " DESC ";
->>>>>>> bd2fbae8ced0fc0bb5b97fd73514b77ca220b008
             Cursor cursor = db.query(
                     QuizContract.QuizTable.TABLE_NAME,   // The table to query
                     projection,                 // The array of columns to return (pass null to get all)
@@ -162,20 +157,13 @@ public class HistoryActivity extends MenuActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-<<<<<<< HEAD
-            String senderEmail = "valinipatten@gmail.com";
-            String password = ".......";
-=======
             String senderEmail = "suimiedevlop@gmail.com";
             String password = "Develop!@#";
->>>>>>> bd2fbae8ced0fc0bb5b97fd73514b77ca220b008
             String subject = "Quiz Whiz";
-            String mMailString1="Test";
-            String mCurrentUser1="valinipatten@yahoo.com";
 
             try{
                 GMailSender sender = new GMailSender(senderEmail, password);
-                sender.sendMail(subject, mMailString1, senderEmail, mCurrentUser1);
+                sender.sendMail(subject, mMailString, senderEmail, mEmail);
             } catch (Exception e) {
                 e.printStackTrace();
             }

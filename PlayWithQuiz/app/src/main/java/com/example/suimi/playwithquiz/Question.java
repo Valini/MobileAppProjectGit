@@ -29,6 +29,7 @@ public class Question {
 
     public String getAnswer() { return answer; }
 
+    // return the index of correct answer
     public int getAnswerIdx(){
         for(int i=0; i < NO_OF_CHOICES; i++){
             if (answer.equals(choices[i]))  return i;
@@ -37,6 +38,7 @@ public class Question {
         return -1;
     }
 
+    // put a choice in an order random
     public void addChoice(String c){
         Random rand = new Random();
 
@@ -49,6 +51,7 @@ public class Question {
         }
     }
 
+    // return string of nth choice
     public String getNthChoice(int nth){
         return choices[nth];
     }
@@ -57,6 +60,8 @@ public class Question {
         answer = a;
     }
 
+
+    // Check user's answer is correct
     public boolean isCorrectAnswer(int a){
         if ( a < 0 || a > NO_OF_CHOICES)    return false;
 
@@ -66,6 +71,7 @@ public class Question {
         return false;
     }
 
+    // Check user's answer is correct
     public boolean isCorrectAnswer(String a){
         if (a.equals(answer))
             return true;

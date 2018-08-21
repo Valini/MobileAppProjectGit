@@ -36,10 +36,7 @@ import java.util.TimeZone;
 public class PlayGameActivity extends MenuActivity {
     static int NO_OF_QUESTIONS = 5;
     private boolean isLoading = false;
-    public String mDifficulty = "easy";     // 1 - Easy, 2 - Medium, 3 - Hard
 
-    // Store user's email address
-    String mCurrentUser = "";
     // Store jsonstring from api call -> this is for processing to restore data when resume the activity
     String mJsonString;
     // need restore or not(true-restore, false-don't need to restore)
@@ -69,14 +66,14 @@ public class PlayGameActivity extends MenuActivity {
         // store email address and difficulty user entered which is passed by dialog(MainActivity)
         Intent intentReceived = getIntent();
         if(intentReceived.hasExtra(Intent.EXTRA_TEXT)){
-            mCurrentUser = intentReceived.getStringExtra(Intent.EXTRA_TEXT);
+            mEmail = intentReceived.getStringExtra(Intent.EXTRA_TEXT);
         }
         if(intentReceived.hasExtra(Intent.EXTRA_SUBJECT)){
             mDifficulty = intentReceived.getStringExtra(Intent.EXTRA_SUBJECT);
         }
 
 
-        Log.i(MenuActivity.LOG_TAG, "[OnCreate] EMAIL : " + mCurrentUser + " | DIFFICULTY : " + mDifficulty);
+        Log.i(MenuActivity.LOG_TAG, "[OnCreate] EMAIL : " + mEmail + " | DIFFICULTY : " + mDifficulty);
     }
 
     @Override
@@ -102,7 +99,7 @@ public class PlayGameActivity extends MenuActivity {
         // save email address, data from api and user's selection
         mUserAnswer = mSliderAdapter.userAnswer;
 
-        outState.putString("EMAIL", mCurrentUser);
+        outState.putString("EMAIL", mEmail);
         outState.putString("JSON_QUIZ", mJsonString);
         outState.putIntArray("USER_ANSWERS", mUserAnswer);
 
@@ -114,7 +111,7 @@ public class PlayGameActivity extends MenuActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         // restore the data before stopped
-        mCurrentUser = savedInstanceState.getString("EMAIL");
+        mEmail = savedInstanceState.getString("EMAIL");
         mJsonString = savedInstanceState.getString("JSON_QUIZ");
         mUserAnswer = savedInstanceState.getIntArray("USER_ANSWERS");
 
@@ -202,7 +199,7 @@ public class PlayGameActivity extends MenuActivity {
            // HistoryDbHelper dbHelper = new HistoryDbHelper(PlayGameActivity.this);
             //dbHelper.saveScoreToDB(mCurrentUser, score, difficulty);
 
-            saveScoreToDB(mCurrentUser, score, difficulty);
+            saveScoreToDB(mEmail, score, difficulty);
 
             moveToHistoryActivityAndSendEmail();
 
@@ -281,6 +278,7 @@ public class PlayGameActivity extends MenuActivity {
         s = s.replace("&eacute;", "é");
         s = s.replace("&shy;", "-");
         s = s.replace("&#173;", "-");
+        s = s.replace("&Uuml;", "Ü");
         return s;
     }
 
@@ -378,10 +376,24 @@ public class PlayGameActivity extends MenuActivity {
     }
 
     public void moveToHistoryActivityAndSendEmail(){
-        String resultString = "Quiz Whiz : Game Score - [" + score + "/" + NO_OF_QUESTIONS + "]";
+
+        // make string of body of email
+        String resultString = "Quiz Whiz : Game Score - [" + score + "/" + NO_OF_QUESTIONS + "]\n";
+
+        int noQ = 0;
+        for(Question q : mQuestionList){
+            resultString += ("\n\n(" + (noQ+1) + ")" + q.getQuestion() + "\n - Your choice : ");
+            if (mUserAnswer[noQ] >= 0)
+                resultString += q.getNthChoice(mUserAnswer[noQ]);
+            resultString += "\n - Correct Answer : " + q.getAnswer() + "\n\n";
+            for(int i=0; i < Question.NO_OF_CHOICES; i++){
+                resultString += ((i+1) + ". " + q.getNthChoice(i) + "\n");
+            }
+            noQ++;
+        }
 
         Intent intentHistory = new Intent(PlayGameActivity.this, HistoryActivity.class);
-        intentHistory.putExtra(Intent.EXTRA_TEXT, mCurrentUser);
+        intentHistory.putExtra(Intent.EXTRA_TEXT, mEmail);
         intentHistory.putExtra(Intent.EXTRA_SUBJECT, resultString);
 
         startActivity(intentHistory);
