@@ -164,6 +164,9 @@ public class MenuActivity extends AppCompatActivity {
                 "1"
         );
         cursor.moveToFirst();
+
+        if(cursor.getCount() <= 0) return "";
+
         //save the data from database to scoreList
         String email = cursor.getString(1);
 
