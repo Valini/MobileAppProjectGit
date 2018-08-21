@@ -16,6 +16,7 @@ import java.util.TimeZone;
 
 public class HistoryDbHelper extends SQLiteOpenHelper {
 
+
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "scoredb.db";
     private SQLiteDatabase db;
@@ -38,7 +39,6 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
 
 
     public void onCreate(SQLiteDatabase db){
-
         this.db = db;
         db.execSQL(SQL_CREATE_ENTRIES);
 

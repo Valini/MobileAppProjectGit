@@ -28,34 +28,6 @@ public class GMailSender extends Authenticator {
 
         Properties props = new Properties();
 
-<<<<<<< HEAD
-//        props.setProperty("mail.transport.protocol", "smtp");
-//        props.setProperty("mail.host", mailhost);
-//
-//        props.put("mail.smtp.auth", "true");
-//        props.put("mail.smtp.starttls.enable", "true");
-//        props.put("mail.smtp.host", "smtp.gmail.com");
-//        props.put("mail.smtp.port", "25");
-/*here
-
-=======
->>>>>>> bd2fbae8ced0fc0bb5b97fd73514b77ca220b008
-        props.setProperty("mail.transport.protocol", "smtp");
-        props.setProperty("mail.host", mailhost);
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.socketFactory.fallback", "false");
-        props.setProperty("mail.smtp.quitwait", "false");
-
-        session = Session.getDefaultInstance(props, this);here*/
-
-
-       // this.user = user;
-        //this.password = password;
-
-        //Properties props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");
         props.setProperty("mail.host", mailhost);
         props.put("mail.smtp.auth", "true");

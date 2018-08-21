@@ -1,5 +1,5 @@
 package com.example.suimi.playwithquiz;
-
+//HISTORY CLASS FOR SCORE
 public class History {
     private int id;
     private String email;
