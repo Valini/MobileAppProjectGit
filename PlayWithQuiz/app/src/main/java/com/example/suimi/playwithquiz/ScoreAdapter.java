@@ -34,7 +34,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
 
        // oneItemViewHolder.tvOne.setText(scoreList.get(i).getId()+"");
         oneItemViewHolder.tvOneItemEmail.setText(scoreList.get(i).getEmail());
-        oneItemViewHolder.tvSecondItemScore.setText(scoreList.get(i).getScore()+""+" / 5");
+        oneItemViewHolder.tvSecondItemScore.setText(scoreList.get(i).getScore()+""+" / " + PlayGameActivity.NO_OF_QUESTIONS);
         oneItemViewHolder.tvThirdItemDate.setText(scoreList.get(i).getDate());
         oneItemViewHolder.tvFourthItemDifficulty.setText(scoreList.get(i).getDifficultyStr());
         oneItemViewHolder.singleItemParentLayout.setOnClickListener(new View.OnClickListener(){
@@ -48,7 +48,10 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
 
     }
 
+<<<<<<< HEAD
             //GETTING THE NUMBER OF ITEMS FROM THE LIST
+=======
+>>>>>>> c3c201375bf37a06f58e42b60b655f0ce8bff770
             @Override
             public int getItemCount() {
                 return scoreList.size();
@@ -71,13 +74,6 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.OneItemViewH
                     tvFourthItemDifficulty = itemView.findViewById(R.id.tv_in_item4Difficulty);
                     singleItemParentLayout = itemView.findViewById(R.id.single_item_parent_layout);
                 }
-
-
             }
-
-
-
-
-
     }
 

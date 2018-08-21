@@ -7,12 +7,10 @@ public class Question {
 
     private String question;
     private String[] choices;
-    private int[] choicesOrder;
     private String answer;
 
     public Question(){
         choices = new String[NO_OF_CHOICES];
-        choicesOrder = new int[NO_OF_CHOICES];
     }
 
     public Question(String question, String answer){
