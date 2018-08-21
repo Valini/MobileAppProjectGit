@@ -67,14 +67,14 @@ public class HistoryActivity extends MenuActivity {
         ScoreAdapter scoreAdapter = new ScoreAdapter(scoreList);
         myRcView.setAdapter(scoreAdapter);
         myRcView.setLayoutManager(new LinearLayoutManager(this));
-<<<<<<< HEAD
+
 
         if (mEmail.length() > 0 && mMailString.length() >0 ){
             //sendEmail();
-=======
+
         //send email id there is a player and score
         if (mCurrentUser.length() > 0 && mMailString.length() >0 ){
->>>>>>> origin/master
+
             new SendEmail().execute();
         }
     }
@@ -108,11 +108,9 @@ public class HistoryActivity extends MenuActivity {
                     QuizContract.QuizTable.COLUMN_DATE,
                     QuizContract.QuizTable.COLUMN_DIFFICULTY
             };
-<<<<<<< HEAD
 
-=======
             //order by date descending
->>>>>>> origin/master
+
             String orderby = QuizContract.QuizTable.COLUMN_DATE + " DESC";
 
             Cursor cursor = db.query(
@@ -166,7 +164,7 @@ public class HistoryActivity extends MenuActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-<<<<<<< HEAD
+
             String senderEmail = "suimiedevlop@gmail.com";
             String password = "Develop!@#";
             String subject = "Quiz Whiz";
