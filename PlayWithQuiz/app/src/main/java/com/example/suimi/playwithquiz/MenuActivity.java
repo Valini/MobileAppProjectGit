@@ -62,7 +62,9 @@ public class MenuActivity extends AppCompatActivity {
         int selectedItemId = item.getItemId();
 
         if(selectedItemId == R.id.miPlayGame) {
-            ShowEmailEnteringDialog();
+//            ShowEmailEnteringDialog();
+            Intent mainActivity = new Intent(this, MainActivity.class);
+            startActivity(mainActivity);
 
         }else if(selectedItemId == R.id.miShowHistory){
             Intent intentHistory = new Intent(this, HistoryActivity.class);
@@ -165,8 +167,13 @@ public class MenuActivity extends AppCompatActivity {
         );
         cursor.moveToFirst();
 
+<<<<<<< HEAD
         if(cursor.getCount() <= 0) return "";
 
+=======
+        if(cursor.getCount() <= 0){return "";}
+        
+>>>>>>> 07b8977a2d58aa8089075c205e78c28dfee813cc
         //save the data from database to scoreList
         String email = cursor.getString(1);
 
