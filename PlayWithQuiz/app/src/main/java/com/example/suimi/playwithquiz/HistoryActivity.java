@@ -130,8 +130,6 @@ public class HistoryActivity extends MenuActivity {
                 scoreHistory.setDate(date);
                 scoreHistory.setDifficulty(difficulty);
                 scoreList.add(scoreHistory);
-
-
             }while (cursor.moveToNext());
             isLoading = false;
             return scoreList;
